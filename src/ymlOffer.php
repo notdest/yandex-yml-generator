@@ -1,6 +1,6 @@
 <?php
-
-class ymlOffer extends DomElement
+namespace notdest\yml_generator;
+class ymlOffer extends \DomElement
 {
     const DESCRIPTION_MAX_LENGTH = 3000;
 	protected $type  		;

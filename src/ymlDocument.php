@@ -1,11 +1,6 @@
 <?php
-
-
-
-
-
-
-class ymlDocument extends DomDocument 
+namespace notdest\yml_generator;
+class ymlDocument extends \DomDocument
 {
 
 	protected $currencies 	;
