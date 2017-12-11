@@ -189,7 +189,7 @@ class ymlDocument extends \DomDocument
 
     protected function newOffer($price, $currency, $category, $type, $url)
     {
-        $offer = new ymlOffer($type);
+        $offer = new ymlOffer($type, $this);
         $this->offers->appendChild($offer);
 
 

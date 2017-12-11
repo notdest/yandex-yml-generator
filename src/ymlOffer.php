@@ -6,29 +6,36 @@ class ymlOffer extends \DomElement
 {
 
     const DESCRIPTION_MAX_LENGTH = 3000;
+    const ID_MAX_LENGTH = 20;
     const MAX_IMAGES_COUNT = 10;
     protected $type;
     protected $permitted;
+    /**
+     * @param $strict bool, if false - set unlimited images count and description length
+     */
     private $strict = true;
+    private $Document;
     protected $aliases = array('origin' => 'country_of_origin', 'category' => 'market_category', 'deliveryCost' => 'local_delivery_cost', 'warranty' => 'manufacturer_warranty',
         'sale' => 'sales_notes', 'pic' => 'picture', 'isbn' => 'ISBN', 'pages' => 'page_extent', 'contents' => 'table_of_contents', 'performer' => 'performed_by',
         'performance' => 'performance_type', 'length' => 'recording_length', 'stars' => 'hotel_stars', 'priceMin' => 'price_min', 'priceMax' => 'price_max', 'hallPart' => 'hall_part',
         'premiere' => 'is_premiere', 'kids' => 'is_kids');
 
 
-    public function __construct($type)
+    public function __construct($type, ymlDocument $Document)
     {
         parent::__construct('offer');
         $this->type = $type;
-        $p = array(
+        $this->Document = $Document;
+        $p = [
             'simple' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'vendor', 'vendorCode', 'sales_notes', 'manufacturer_warranty', 'country_of_origin', 'adult', 'barcode', 'cpa', 'param'),
-            'arbitrary' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'vendorCode', 'sales_notes', 'manufacturer_warranty', 'country_of_origin', 'adult', 'barcode', 'cpa', 'param', 'downloadable', 'typePrefix', 'rec', 'expiry', 'weight', 'dimensions'),
-            'book' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'downloadable', 'author', 'publisher', 'series', 'year', 'ISBN', 'volume', 'part', 'language', 'binding', 'page_extent', 'table_of_contents'),
-            'audiobook' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'downloadable', 'author', 'publisher', 'series', 'year', 'ISBN', 'volume', 'part', 'language', 'table_of_contents', 'performed_by', 'performance_type', 'storage', 'format', 'recording_length'),
-            'music' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'barcode', 'year', 'media', 'artist'),
-            'video' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'adult', 'barcode', 'year', 'media', 'starring', 'director', 'originalName', 'country'),
-            'tour' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'country', 'worldRegion', 'region', 'dataTour', 'hotel_stars', 'room', 'meal', 'price_min', 'price_max', 'options'),
-            'event' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'hall', 'hall_part', 'is_premiere', 'is_kids'));
+            'arbitrary' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'vendorCode', 'sales_notes', 'manufacturer_warranty', 'country_of_origin', 'adult', 'barcode', 'cpa', 'param', 'downloadable', 'typePrefix', 'rec', 'expiry', 'weight', 'dimensions'),
+            'book' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'downloadable', 'author', 'publisher', 'series', 'year', 'ISBN', 'volume', 'part', 'language', 'binding', 'page_extent', 'table_of_contents'),
+            'audiobook' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'downloadable', 'author', 'publisher', 'series', 'year', 'ISBN', 'volume', 'part', 'language', 'table_of_contents', 'performed_by', 'performance_type', 'storage', 'format', 'recording_length'),
+            'music' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'barcode', 'year', 'media', 'artist'),
+            'video' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'adult', 'barcode', 'year', 'media', 'starring', 'director', 'originalName', 'country'),
+            'tour' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'country', 'worldRegion', 'region', 'dataTour', 'hotel_stars', 'room', 'meal', 'price_min', 'price_max', 'options'),
+            'event' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'hall', 'hall_part', 'is_premiere', 'is_kids')
+        ];
 
         $this->permitted = $p[$type];
     }
@@ -37,7 +44,7 @@ class ymlOffer extends \DomElement
     public function id($id)
     {
         if (preg_match("/[^a-z,A-Z,0-9]/", $id)) throw new \RuntimeException("id должен содержать только латинские буквы и цифры");
-        if (strlen($id) > 20) throw new \RuntimeException("id длиннее 20 символов");
+        if (strlen($id) > self::ID_MAX_LENGTH) throw new \RuntimeException("id длиннее 20 символов");
         $this->setAttribute('id', $id);
         return $this;
     }
@@ -91,7 +98,7 @@ class ymlOffer extends \DomElement
 
     protected function _strict($args)
     {
-        $this->strict = boolval($args[0]);
+        $this->strict = empty($args) || boolval($args[0]);
     }
 
     protected function _page_extent($args)
@@ -103,11 +110,21 @@ class ymlOffer extends \DomElement
 
     protected function _description($description)
     {
-        // TODO no validation of tags
+        //  ???      if (0 !== $this->getElementsByTagName('description')->length) throw new \RuntimeException('элемент description уже существует');
+        // TODO add validation of tags
         $description = str_ireplace('<![CDATA[', '', $description[0]);
         $description = str_replace(']]>', '', $description);
-        $description = '<![CDATA[' . $description . ']]>';
-        return $this->addStr('description', $description, $this->strict ? self::DESCRIPTION_MAX_LENGTH : false);
+        if ($this->strict) {
+            if (self::DESCRIPTION_MAX_LENGTH < mb_strlen($description, 'UTF-8')) {
+                throw new \RuntimeException('description не может быть более ' . self::DESCRIPTION_MAX_LENGTH . ' символов.');
+            }
+        }
+        $description = $this->Document->createCDATASection($description);
+        $newEl = $this->Document->createElement('description');
+        $newEl->appendChild($description);
+        $this->appendChild($newEl);
+        return $this;
+
     }
 
 
