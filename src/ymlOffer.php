@@ -4,6 +4,7 @@ namespace yml_generator;
 class ymlOffer extends \DomElement
 {
     const DESCRIPTION_MAX_LENGTH = 3000;
+    const MAX_IMAGES_COUNT = 10;
     protected $type;
     protected $permitted;
     protected $aliases = array('origin' => 'country_of_origin', 'category' => 'market_category', 'deliveryCost' => 'local_delivery_cost', 'warranty' => 'manufacturer_warranty',
@@ -147,7 +148,7 @@ class ymlOffer extends \DomElement
     protected function _picture($args)
     {
         $pics = $this->getElementsByTagName('picture');
-        if ($pics->length > 10) throw new \RuntimeException("Можно использовать максимум 10 картинок");
+        if ($pics->length > self::MAX_IMAGES_COUNT) throw new \RuntimeException("Можно использовать максимум 10 картинок");
         $this->addStr('picture', $args[0], 512);
         return $this;
     }
