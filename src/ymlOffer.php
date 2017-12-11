@@ -21,7 +21,7 @@ class ymlOffer extends \DomElement
         parent::__construct('offer');
         $this->type = $type;
         $p = array(
-            'simple' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'vendor', 'vendorCode', 'sales_notes', 'manufacturer_warranty', 'country_of_origin', 'adult', 'barcode', 'cpa', 'param'),
+            'simple' => array('strict', 'oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'vendor', 'vendorCode', 'sales_notes', 'manufacturer_warranty', 'country_of_origin', 'adult', 'barcode', 'cpa', 'param'),
             'arbitrary' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'vendorCode', 'sales_notes', 'manufacturer_warranty', 'country_of_origin', 'adult', 'barcode', 'cpa', 'param', 'downloadable', 'typePrefix', 'rec', 'expiry', 'weight', 'dimensions'),
             'book' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'store', 'pickup', 'delivery', 'local_delivery_cost', 'downloadable', 'author', 'publisher', 'series', 'year', 'ISBN', 'volume', 'part', 'language', 'binding', 'page_extent', 'table_of_contents'),
             'audiobook' => array('oldprice', 'market_category', 'picture', 'description', 'age', 'downloadable', 'author', 'publisher', 'series', 'year', 'ISBN', 'volume', 'part', 'language', 'table_of_contents', 'performed_by', 'performance_type', 'storage', 'format', 'recording_length'),
