@@ -1,11 +1,6 @@
 <?php
-
-
-
-
-
-
-class ymlDocument extends DomDocument 
+namespace yml_generator;
+class ymlDocument extends \DomDocument
 {
 
 	protected $currencies 	;
@@ -18,7 +13,7 @@ class ymlDocument extends DomDocument
 	{
 		parent::__construct('1.0',$enc);
 
-		$imp = new DOMImplementation;
+		$imp = new \DOMImplementation;
 		$this->appendChild( $imp->createDocumentType('yml_catalog', '', 'shops.dtd') );			// делаем доктайп
 
 		$root 			= $this->createElement('yml_catalog');									// делаем основные элементы
@@ -28,7 +23,7 @@ class ymlDocument extends DomDocument
 		$root->appendChild($shop);
 		$this->appendChild($root);
 
-		if(mb_strlen($name,$this->encoding) >20 ) throw new RuntimeException("name='$name' длиннее 20 символов");
+		if(mb_strlen($name,$this->encoding) >20 ) throw new \RuntimeException("name='$name' длиннее 20 символов");
 
 		$this 	->add('name'	,$name)
 				->add('company'	,$company)
@@ -211,10 +206,10 @@ class ymlDocument extends DomDocument
 		$this->offers->appendChild($offer);  	
 
 
-		if( mb_strlen($url,$this->encoding) >512 )		throw new RuntimeException("url должен быть короче 512 символов");
+		if( mb_strlen($url,$this->encoding) >512 )		throw new \RuntimeException("url должен быть короче 512 символов");
 
 		if( (!is_int($category)) || ($category<1) || ($category>=pow(10,19)) )
-											throw new RuntimeException("categoryId - целое число, не более 18 знаков");
+											throw new \RuntimeException("categoryId - целое число, не более 18 знаков");
 
 		$offer 	->add('price',$price)
 				->add('currencyId',$currency)
@@ -229,7 +224,7 @@ class ymlDocument extends DomDocument
 
 	protected function exc($text)
 	{
-		throw new RuntimeException($text);
+		throw new \RuntimeException($text);
 	}
 
 
