@@ -1,5 +1,5 @@
 <?php
-namespace notdest\yml_generator;
+namespace yml_generator;
 class ymlOffer extends \DomElement
 {
     const DESCRIPTION_MAX_LENGTH = 3000;
@@ -31,8 +31,8 @@ class ymlOffer extends \DomElement
 
 	public function id($id)
 	{
-		if(preg_match("/[^a-z,A-Z,0-9]/",$id)) 		throw new RuntimeException("id должен содержать только латинские буквы и цифры");
-		if( strlen($id)>20 )						throw new RuntimeException("id длиннее 20 символов");
+		if(preg_match("/[^a-z,A-Z,0-9]/",$id)) 		throw new \RuntimeException("id должен содержать только латинские буквы и цифры");
+		if( strlen($id)>20 )						throw new \RuntimeException("id длиннее 20 символов");
 		$this->setAttribute('id',$id );
 		return $this;
 	}
@@ -40,21 +40,21 @@ class ymlOffer extends \DomElement
 
 	public function available($val=true)
 	{
-		if( !is_bool($val) )							throw new RuntimeException("available должен быть boolean");
+		if( !is_bool($val) )							throw new \RuntimeException("available должен быть boolean");
 		$this->setAttribute('available',($val) ? 'true':'false' );
 		return $this;
 	}
 
 	public function bid($bid)
 	{
-		if( !is_int($bid) )							throw new RuntimeException("bid должен быть integer");
+		if( !is_int($bid) )							throw new \RuntimeException("bid должен быть integer");
 		$this->setAttribute('bid',$bid );
 		return $this;
 	}
 
 	public function cbid($cbid)
 	{
-		if( !is_int($cbid) )							throw new RuntimeException("cbid должен быть integer");
+		if( !is_int($cbid) )							throw new \RuntimeException("cbid должен быть integer");
 		$this->setAttribute('cbid',$cbid );
 		return $this;
 	}
@@ -65,7 +65,7 @@ class ymlOffer extends \DomElement
 		if( array_key_exists($method,$this->aliases) )	$method = $this->aliases[$method];
 
 		if( !in_array($method, $this->permitted) )
-			throw new RuntimeException("$method вызван при типе товара {$this->type}");
+			throw new \RuntimeException("$method вызван при типе товара {$this->type}");
 
 		// значения, которые просто добавляем
 		if( in_array($method, array('series','publisher','author','vendorCode','vendor','expiry','rec',
@@ -87,8 +87,8 @@ class ymlOffer extends \DomElement
 
 	protected function _page_extent($args)
 	{
-		if( !is_int($args[0]) )		throw new RuntimeException("page_extent должен содержать только цифры");
-		if($args[0]<0)				throw new RuntimeException("page_extent должен быть положительным числом");
+		if( !is_int($args[0]) )		throw new \RuntimeException("page_extent должен содержать только цифры");
+		if($args[0]<0)				throw new \RuntimeException("page_extent должен быть положительным числом");
 		return $this->add('page_extent',$args[0]);
 	}
 
@@ -110,9 +110,9 @@ class ymlOffer extends \DomElement
 
 	protected function _age($args)
 	{
-		if( !is_int($args[0]))	throw new RuntimeException("age должен иметь тип int");
+		if( !is_int($args[0]))	throw new \RuntimeException("age должен иметь тип int");
 
-		$ageEl 	= new DomElement( 'age',$args[0] );
+		$ageEl 	= new \DomElement( 'age',$args[0] );
 		$this->appendChild($ageEl);
 		$ageEl->setAttribute('unit',$args[1] );
 
@@ -120,16 +120,16 @@ class ymlOffer extends \DomElement
 		{
 			case 'year':
 				if(!in_array($args[0],array(0,6,12,16,18)))
-					throw new RuntimeException("age при age_unit=year должен быть 0, 6, 12, 16 или 18");
+					throw new \RuntimeException("age при age_unit=year должен быть 0, 6, 12, 16 или 18");
 				break;
 
 			case 'month':
 				if( ($args[0]<0)||($args[0]>12) )
-					throw new RuntimeException("age при age_unit=month должен быть 0<=age<=12");
+					throw new \RuntimeException("age при age_unit=month должен быть 0<=age<=12");
 				break;
 
 			default:
-					throw new RuntimeException("age unit должен быть month или year");
+					throw new \RuntimeException("age unit должен быть month или year");
 				break;
 		}
 		return $this;
@@ -137,7 +137,7 @@ class ymlOffer extends \DomElement
 
 	protected function _param($args)
 	{
-		$newEl 	= new DomElement('param',$args[1]);
+		$newEl 	= new \DomElement('param',$args[1]);
 		$this->appendChild($newEl);
 		$newEl->setAttribute('name', $args[0]);
 		if( isset($args[2]) ) 	$newEl->setAttribute('unit', $args[2]);
@@ -148,23 +148,23 @@ class ymlOffer extends \DomElement
 	protected function _picture( $args )
 	{
 		$pics	= $this->getElementsByTagName('picture');
-		if($pics->length >10)		throw new RuntimeException("Можно использовать максимум 10 картинок");
+		if($pics->length >10)		throw new \RuntimeException("Можно использовать максимум 10 картинок");
 		$this->addStr('picture',$args[0],512);
 		return $this;
 	}
 
 	protected function _barcode($args)
 	{
-		if( !is_int($args[0]) )		throw new RuntimeException("barcode должен содержать только цифры");
+		if( !is_int($args[0]) )		throw new \RuntimeException("barcode должен содержать только цифры");
 		$len 	= strlen($args[0]);
-		if( !($len==8 || $len==12 || $len==13) ) throw new RuntimeException("barcode должен содержать 8, 12 или 13 цифр");
+		if( !($len==8 || $len==12 || $len==13) ) throw new \RuntimeException("barcode должен содержать 8, 12 или 13 цифр");
 		return $this->add('barcode',$args[0]);
 	}
 
 
 	protected function _year($args)
 	{
-		if( !is_int($args[0]) ) throw new RuntimeException("year должен быть int");
+		if( !is_int($args[0]) ) throw new \RuntimeException("year должен быть int");
 		return $this->add('year',$args[0]);
 	}
 
@@ -172,14 +172,14 @@ class ymlOffer extends \DomElement
 	protected function _dimensions($args)
 	{
 		if( !is_float($args[0]) || !is_float($args[1]) || !is_float($args[2]) )
-			throw new RuntimeException("dimensions должен быть float");
+			throw new \RuntimeException("dimensions должен быть float");
 		return $this->add('dimensions',$args[0].'/'.$args[1].'/'.$args[2]);
 	}
 
 
 	protected function _weight($args)
 	{
-		if( !is_float($args[0]) ) throw new RuntimeException("weight должен быть float");
+		if( !is_float($args[0]) ) throw new \RuntimeException("weight должен быть float");
 		return $this->add('weight',$args[0]);
 	}
 
@@ -191,13 +191,13 @@ class ymlOffer extends \DomElement
 
 	public function addStr( $name,$val,$limit )
 	{
-		if( $limit && ( mb_strlen($val,"UTF-8")>$limit) )	throw new RuntimeException("$name должен быть короче $limit символов");
+		if( $limit && ( mb_strlen($val,"UTF-8")>$limit) )	throw new \RuntimeException("$name должен быть короче $limit символов");
 		return $this->add( $name,$val );
 	}
 
 	public function add( $name,$val=false )
 	{
-		$newEl 	= ($val===false) ? new DomElement($name) : new DomElement($name,$val);
+		$newEl 	= ($val===false) ? new \DomElement($name) : new \DomElement($name,$val);
 		$this->appendChild($newEl);
 		return $this;
 	}

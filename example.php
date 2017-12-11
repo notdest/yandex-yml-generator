@@ -2,9 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 header('Content-Type: text/xml; charset=utf-8');
-include('./ymlOffer.php');
-include("./ymlDocument.php");
-
+require $_SERVER['DOCUMENT_ROOT'].'vendor/autoload.php';
+use yml_generator\ymlDocument;
 	//параметры: Короткое название магазина, полное наименование компании,URL главной страницы магазина, [кодировка]
 	$y 		= new ymlDocument('Магаз','ООО Шикарный магаз интернейшнл','http://best.seller.ru/');
 
