@@ -95,7 +95,7 @@ class ymlOffer extends \DomElement
 	protected function _description($description)
 	{
         // TODO no validation of tags
-        $description = str_ireplace('<![CDATA[', '', $description);
+        $description = str_ireplace('<![CDATA[', '', $description[0]);
         $description = str_replace(']]>', '', $description);
         $description = '<![CDATA[' . $description . ']]>';
         return $this->addStr('description', $description, self::DESCRIPTION_MAX_LENGTH);
