@@ -2,6 +2,7 @@
 
 class ymlOffer extends DomElement
 {
+    const DESCRIPTION_MAX_LENGTH = 3000;
 	protected $type  		;
 	protected $permitted 	;
 	protected $aliases 		= array('origin'=>'country_of_origin','category'=>'market_category','deliveryCost' =>'local_delivery_cost','warranty'=>'manufacturer_warranty',
@@ -14,7 +15,7 @@ class ymlOffer extends DomElement
 	{
 		parent::__construct('offer');
 		$this->type = $type;
-		$p=array( 
+		$p=array(
 			'simple' 	=>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','local_delivery_cost','vendor','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param'),
 			'arbitrary' =>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','local_delivery_cost','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param','downloadable','typePrefix','rec','expiry','weight','dimensions'),
 			'book'		=>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','local_delivery_cost','downloadable','author','publisher','series','year','ISBN','volume','part','language','binding','page_extent','table_of_contents'),
@@ -78,7 +79,7 @@ class ymlOffer extends DomElement
 		{
 			if( !isset($args[0]) )	$args[0] = true;
 			return $this->add($method,($args[0]) ? 'true' :'false');
-		}	
+		}
 
 		$method = '_'.$method;
 		return $this->$method($args);
@@ -90,10 +91,14 @@ class ymlOffer extends DomElement
 		if($args[0]<0)				throw new RuntimeException("page_extent должен быть положительным числом");
 		return $this->add('page_extent',$args[0]);
 	}
-	
-	protected function _description($args)
+
+	protected function _description($description)
 	{
-		return $this->addStr('description',$args[0],175);
+        // TODO no validation of tags
+        $description = str_ireplace('<![CDATA[', '', $description);
+        $description = str_replace(']]>', '', $description);
+        $description = '<![CDATA[' . $description . ']]>';
+        return $this->addStr('description', $description, self::DESCRIPTION_MAX_LENGTH);
 	}
 
 
@@ -103,15 +108,15 @@ class ymlOffer extends DomElement
 	}
 
 
-	protected function _age($args)	
-	{ 
+	protected function _age($args)
+	{
 		if( !is_int($args[0]))	throw new RuntimeException("age должен иметь тип int");
 
 		$ageEl 	= new DomElement( 'age',$args[0] );
 		$this->appendChild($ageEl);
 		$ageEl->setAttribute('unit',$args[1] );
 
-		switch ($args[1]) 
+		switch ($args[1])
 		{
 			case 'year':
 				if(!in_array($args[0],array(0,6,12,16,18)))
@@ -122,7 +127,7 @@ class ymlOffer extends DomElement
 				if( ($args[0]<0)||($args[0]>12) )
 					throw new RuntimeException("age при age_unit=month должен быть 0<=age<=12");
 				break;
-			
+
 			default:
 					throw new RuntimeException("age unit должен быть month или year");
 				break;
@@ -139,7 +144,7 @@ class ymlOffer extends DomElement
 		return $this ;
 	}
 
-		
+
 	protected function _picture( $args )
 	{
 		$pics	= $this->getElementsByTagName('picture');
@@ -165,15 +170,15 @@ class ymlOffer extends DomElement
 
 
 	protected function _dimensions($args)
-	{		
-		if( !is_float($args[0]) || !is_float($args[1]) || !is_float($args[2]) ) 
+	{
+		if( !is_float($args[0]) || !is_float($args[1]) || !is_float($args[2]) )
 			throw new RuntimeException("dimensions должен быть float");
 		return $this->add('dimensions',$args[0].'/'.$args[1].'/'.$args[2]);
 	}
 
 
 	protected function _weight($args)
-	{		
+	{
 		if( !is_float($args[0]) ) throw new RuntimeException("weight должен быть float");
 		return $this->add('weight',$args[0]);
 	}
@@ -186,7 +191,7 @@ class ymlOffer extends DomElement
 
 	public function addStr( $name,$val,$limit )
 	{
-		if( $limit && ( mb_strlen($val,"UTF-8")>$limit) )	throw new RuntimeException("$item должен быть короче $limit символов");
+		if( $limit && ( mb_strlen($val,"UTF-8")>$limit) )	throw new RuntimeException("$name должен быть короче $limit символов");
 		return $this->add( $name,$val );
 	}
 
