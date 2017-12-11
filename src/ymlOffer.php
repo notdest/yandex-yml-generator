@@ -1,12 +1,15 @@
 <?php
 
 namespace yml_generator;
+
 class ymlOffer extends \DomElement
 {
+
     const DESCRIPTION_MAX_LENGTH = 3000;
     const MAX_IMAGES_COUNT = 10;
     protected $type;
     protected $permitted;
+    private $strict = true;
     protected $aliases = array('origin' => 'country_of_origin', 'category' => 'market_category', 'deliveryCost' => 'local_delivery_cost', 'warranty' => 'manufacturer_warranty',
         'sale' => 'sales_notes', 'pic' => 'picture', 'isbn' => 'ISBN', 'pages' => 'page_extent', 'contents' => 'table_of_contents', 'performer' => 'performed_by',
         'performance' => 'performance_type', 'length' => 'recording_length', 'stars' => 'hotel_stars', 'priceMin' => 'price_min', 'priceMax' => 'price_max', 'hallPart' => 'hall_part',
@@ -77,13 +80,18 @@ class ymlOffer extends \DomElement
             return $this->add($method, $args[0]);
 
         // флаги
-        if (in_array($method, array('downloadable', 'adult', 'store', 'pickup', 'delivery', 'manufacturer_warranty'))) {
+        if (in_array($method, array('downloadable', 'adult', 'store', 'pickup', 'delivery', 'manufacturer_warranty', 'strict'))) {
             if (!isset($args[0])) $args[0] = true;
             return $this->add($method, ($args[0]) ? 'true' : 'false');
         }
 
         $method = '_' . $method;
         return $this->$method($args);
+    }
+
+    protected function _strict($args)
+    {
+        $this->strict = boolval($args[0]);
     }
 
     protected function _page_extent($args)
@@ -99,7 +107,7 @@ class ymlOffer extends \DomElement
         $description = str_ireplace('<![CDATA[', '', $description[0]);
         $description = str_replace(']]>', '', $description);
         $description = '<![CDATA[' . $description . ']]>';
-        return $this->addStr('description', $description, self::DESCRIPTION_MAX_LENGTH);
+        return $this->addStr('description', $description, $this->strict ? self::DESCRIPTION_MAX_LENGTH : false);
     }
 
 
@@ -148,7 +156,9 @@ class ymlOffer extends \DomElement
     protected function _picture($args)
     {
         $pics = $this->getElementsByTagName('picture');
-        if ($pics->length > self::MAX_IMAGES_COUNT) throw new \RuntimeException("Можно использовать максимум 10 картинок");
+        if ($this->strict) {
+            if ($pics->length > self::MAX_IMAGES_COUNT) throw new \RuntimeException("Можно использовать максимум 10 картинок");
+        }
         $this->addStr('picture', $args[0], 512);
         return $this;
     }
