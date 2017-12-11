@@ -80,7 +80,7 @@ class ymlOffer extends \DomElement
             return $this->add($method, $args[0]);
 
         // флаги
-        if (in_array($method, array('downloadable', 'adult', 'store', 'pickup', 'delivery', 'manufacturer_warranty', 'strict'))) {
+        if (in_array($method, array('downloadable', 'adult', 'store', 'pickup', 'delivery', 'manufacturer_warranty'))) {
             if (!isset($args[0])) $args[0] = true;
             return $this->add($method, ($args[0]) ? 'true' : 'false');
         }
