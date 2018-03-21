@@ -14,12 +14,11 @@ class ymlDocument extends DomDocument
 	protected $shop 		;	
 
 
-	public function __construct($name, $company ,$url ,$enc = "UTF-8")		// или windows-1251
+	public function __construct($name, $company ,$enc = "UTF-8")		// или windows-1251
 	{
 		parent::__construct('1.0',$enc);
 
 		$imp = new DOMImplementation;
-		$this->appendChild( $imp->createDocumentType('yml_catalog', '', 'shops.dtd') );			// делаем доктайп
 
 		$root 			= $this->createElement('yml_catalog');									// делаем основные элементы
 		$shop 			= $this->createElement('shop');
@@ -32,7 +31,6 @@ class ymlDocument extends DomDocument
 
 		$this 	->add('name'	,$name)
 				->add('company'	,$company)
-				->add('url'		,$url)
 			 	->add('currencies')
 				->add('categories')
 				->add('offers');
@@ -40,6 +38,14 @@ class ymlDocument extends DomDocument
 		$this->currencies 	= $this->getElementsByTagName('currencies'	)->item(0);
 		$this->categories 	= $this->getElementsByTagName('categories'	)->item(0);
 		$this->offers 		= $this->getElementsByTagName('offers'		)->item(0);
+	}
+
+
+	public function url($url)
+	{
+		if( mb_strlen($url,$this->encoding) >50 )	$this->exc(	"url должен быть короче 50 символов"	);	
+		$this->add('url',$url);
+		return $this;
 	}
 
 
@@ -69,20 +75,40 @@ class ymlDocument extends DomDocument
 	}
 
 
+	public function delivery($cost,$days,$before = -1)
+	{
+		$dlvs 	= $this->getElementsByTagName('delivery-options');
+
+		if( !$dlvs->length ){
+			$dlv 	= $this->createElement( 'delivery-options');
+			$this->shop->appendChild($dlv);
+		}else{
+				$dlv 	= $dlvs[0];
+				$opts 	= $dlv->getElementsByTagName('option');
+				if($opts->length >= 5) $this->exc("максимум 5 опций доставки");
+		}
+
+		if( !is_int($cost) || $cost<0 ) 			$this->exc("cost должно быть целым и положительным");
+		if( preg_match("/[^0-9\-]/",$days) )		$this->exc("days должно состоять из цифр и тирэ");
+		if( !is_int($before) || $before>24 )		$this->exc("order-before должно быть целым и меньше 25");
+
+		$opt 	= $this->createElement( 'option');
+
+		$opt->setAttribute('cost', $cost);
+		$opt->setAttribute('days', $days);
+
+		if($before >= 0) $opt->setAttribute('order-before', $before);
+
+		$dlv->appendChild($opt);
+
+		return $this;
+	}
+
 
 	public function cpa($val = true)
 	{
 		if( !is_bool($val) ) $this->exc(' cpa должен быть boolean');
 		$this->add('cpa',($val)?'1':'0');
-		return $this;
-	}
-
-
-
-	public function deliveryCost($val)
-	{
-		if( !is_int($val) ) $this->exc(' Стоимость доставки должна быть int');
-		$this->add('local_delivery_cost',$val);
 		return $this;
 	}
 
@@ -121,15 +147,12 @@ class ymlDocument extends DomDocument
 	}
 
 
-
-
-	public function simple( $price, $currency,$category,$name, $url='' )
+	public function simple( $name, $id, $price, $currency, $category, $from = NULL )
 	{
-		$offer 		= $this->newOffer( $price, $currency,$category,'simple',$url);
+		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'simple', $from );
 		$offer->addStr('name',$name,120);
 		return $offer;
 	}
-
 
 
 	public function arbitrary( $price, $currency,$category,$vendor,$model, $url='' )
@@ -205,22 +228,31 @@ class ymlDocument extends DomDocument
 		return $offer;
 	}
 
-	protected function newOffer( $price, $currency,$category,$type,$url )
+
+	protected function newOffer( $id, $price, $currency, $category, $type, $from )
 	{
-		$offer 			= new ymlOffer($type);
+		$offer 			= new ymlOffer($type,$this->encoding);
 		$this->offers->appendChild($offer);  	
 
-
-		if( mb_strlen($url,$this->encoding) >512 )		throw new RuntimeException("url должен быть короче 512 символов");
+		if(preg_match("/[^a-z,A-Z,0-9]/",$id)) 		$this->exc("id должен содержать только латинские буквы и цифры");
+		if( strlen($id)>20 )						$this->exc("id длиннее 20 символов");
 
 		if( (!is_int($category)) || ($category<1) || ($category>=pow(10,19)) )
-											throw new RuntimeException("categoryId - целое число, не более 18 знаков");
+											$this->exc("categoryId - целое число, не более 18 знаков");
 
-		$offer 	->add('price',$price)
-				->add('currencyId',$currency)
+		if( !is_int($price) || $price<0 ) 			$this->exc("price должно быть целым и положительным");
+
+		if( !is_null($from)){
+			if( !is_bool($from) ) 					$this->exc('from должен быть boolean');
+		}
+
+		$offer 	->setAttribute('id',$id );
+		$offer 	->add('currencyId',$currency)
 				->add('categoryId',$category);
-		if($url) $offer->add('url',$url);
 
+		$pr 	= new DomElement('price',$price);
+		$offer->appendChild($pr);
+		if( !is_null($from))		$pr->setAttribute('from',($from) ? 'true' :'false' );
 
 		return $offer;
 	}

@@ -2,60 +2,120 @@
 
 class ymlOffer extends DomElement
 {
+	protected $enc  		;
 	protected $type  		;
 	protected $permitted 	;
-	protected $aliases 		= array('origin'=>'country_of_origin','category'=>'market_category','deliveryCost' =>'local_delivery_cost','warranty'=>'manufacturer_warranty',
+	protected $aliases 		= array('origin'=>'country_of_origin','warranty'=>'manufacturer_warranty',
 			'sale' =>'sales_notes','pic'=>'picture','isbn'=>'ISBN','pages'=>'page_extent','contents'=>'table_of_contents','performer' =>'performed_by',
 			'performance'=>'performance_type','length'=>'recording_length','stars' => 'hotel_stars','priceMin'=>'price_min','priceMax' =>'price_max','hallPart'=>'hall_part',
 			'premiere' => 'is_premiere', 'kids' => 'is_kids')	;
 
 
-	public function __construct($type)
+	public function __construct($type,$enc)
 	{
 		parent::__construct('offer');
 		$this->type = $type;
 		$p=array( 
-			'simple' 	=>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','local_delivery_cost','vendor','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param'),
-			'arbitrary' =>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','local_delivery_cost','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param','downloadable','typePrefix','rec','expiry','weight','dimensions'),
-			'book'		=>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','local_delivery_cost','downloadable','author','publisher','series','year','ISBN','volume','part','language','binding','page_extent','table_of_contents'),
-			'audiobook' =>		array('oldprice','market_category','picture','description','age','downloadable','author','publisher','series','year','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
-			'music' 	=>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','barcode','year','media','artist'),
-			'video' 	=>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','adult','barcode','year','media','starring','director','originalName','country'),
-			'tour' 		=>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','options'),
-			'event' 	=>		array('oldprice','market_category','picture','description','age','store','pickup','delivery','hall','hall_part','is_premiere','is_kids'));
+			'simple' 	=>		array('group_id','minq','stepq','model','expiry','picture','weight','vat','age','store','pickup','delivery','vendor','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','downloadable','adult','barcode','cpa','rec','param','dimensions'),
+			'arbitrary' =>		array('picture','vat','age','store','pickup','delivery','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param','downloadable','typePrefix','rec','expiry','weight','dimensions'),
+			'book'		=>		array('picture','vat','age','store','pickup','delivery','downloadable','author','publisher','series','year','ISBN','volume','part','language','binding','page_extent','table_of_contents'),
+			'audiobook' =>		array('picture','vat','age','downloadable','author','publisher','series','year','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
+			'music' 	=>		array('picture','vat','age','store','pickup','delivery','barcode','year','media','artist'),
+			'video' 	=>		array('picture','vat','age','store','pickup','delivery','adult','barcode','year','media','starring','director','originalName','country'),
+			'tour' 		=>		array('picture','vat','age','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','options'),
+			'event' 	=>		array('picture','vat','age','store','pickup','delivery','hall','hall_part','is_premiere','is_kids'));
 
 		$this->permitted 	= $p[$type];
-	}
 
-
-	public function id($id)
-	{
-		if(preg_match("/[^a-z,A-Z,0-9]/",$id)) 		throw new RuntimeException("id должен содержать только латинские буквы и цифры");
-		if( strlen($id)>20 )						throw new RuntimeException("id длиннее 20 символов");
-		$this->setAttribute('id',$id );
-		return $this;
+		$this->enc 			= $enc ;
 	}
 
 
 	public function available($val=true)
 	{
-		if( !is_bool($val) )							throw new RuntimeException("available должен быть boolean");
+		$this->check(	!is_bool($val) 		, "available должен быть boolean"	);
 		$this->setAttribute('available',($val) ? 'true':'false' );
 		return $this;
 	}
 
 	public function bid($bid)
 	{
-		if( !is_int($bid) )							throw new RuntimeException("bid должен быть integer");
+		$this->check(	!is_int($bid) 		, "bid должен быть integer"	);
 		$this->setAttribute('bid',$bid );
 		return $this;
 	}
 
 	public function cbid($cbid)
 	{
-		if( !is_int($cbid) )							throw new RuntimeException("cbid должен быть integer");
+		$this->check(	 !is_int($cbid)		, "cbid должен быть integer" );
 		$this->setAttribute('cbid',$cbid );
 		return $this;
+	}
+
+	public function fee($fee)
+	{
+		$this->check(	!is_int($fee) 		, "fee должен быть integer"	);
+		$this->setAttribute('fee',$fee );
+		return $this;
+	}
+
+	public function url($url)
+	{
+		$this->addStr('url',$url,512);
+		return $this;
+	}
+
+	public function oldprice($oldprice)
+	{
+		$this->check(	(!is_int($oldprice)) || ($oldprice < 1)	 , "oldprice должен быть целым положительным числом > 0"	);
+		$this->add('oldprice',$oldprice);
+		return $this;
+	}
+
+	public function dlvOption($cost,$days,$before = -1)
+	{
+		$dlvs 	= $this->getElementsByTagName('delivery-options');
+
+		if( !$dlvs->length ){
+			$dlv 	= new DomElement('delivery-options');
+			$this->appendChild($dlv);
+		}else{
+				$dlv 	= $dlvs[0];
+				$opts 	= $dlv->getElementsByTagName('option');
+				$this->check(	$opts->length >= 5	 	, "максимум 5 опций доставки"	);
+		}
+
+		$this->check(	!is_int($cost) || $cost<0	 	 , "cost должно быть целым и положительным"	);
+		$this->check(	preg_match("/[^0-9\-]/",$days)	 , "days должно состоять из цифр и тирэ"	);
+		$this->check(	!is_int($before) || $before>24	 , "order-before должно быть целым и меньше 25");
+
+		$opt 	= new DomElement( 'option');
+		$dlv->appendChild($opt);
+
+		$opt->setAttribute('cost', $cost);
+		$opt->setAttribute('days', $days);
+
+		if($before >= 0) $opt->setAttribute('order-before', $before);
+
+		return $this;
+	}
+
+
+	public function description($txt,$tags = false)
+	{
+		$this->check(	mb_strlen($txt,$this->enc)>3000	 , "description должен быть короче 3000 символов"	);
+
+		if( $tags ){
+			$cdata	= new DOMCdataSection($txt);
+			$desc 	= new DomElement( 'description');
+			$this->appendChild($desc);
+			$desc->appendChild($cdata);
+			return $this;
+		}else{
+				return $this->add('description');
+		}
+
+		
 	}
 
 
@@ -63,14 +123,13 @@ class ymlOffer extends DomElement
 	{
 		if( array_key_exists($method,$this->aliases) )	$method = $this->aliases[$method];
 
-		if( !in_array($method, $this->permitted) )
-			throw new RuntimeException("$method вызван при типе товара {$this->type}");
+		$this->check(	!in_array( $method,$this->permitted )		 , "$method вызван при типе товара {$this->type}"	);
 
 		// значения, которые просто добавляем
-		if( in_array($method, array('series','publisher','author','vendorCode','vendor','expiry','rec',
-			'typePrefix','country_of_origin','market_category','local_delivery_cost','ISBN','volume','part','language','binding','table_of_contents','performed_by',
+		if( in_array($method, array('model','series','publisher','author','vendorCode','vendor','expiry','rec',
+			'typePrefix','country_of_origin','ISBN','volume','part','language','binding','table_of_contents','performed_by',
 			'performance_type','storage','format','recording_length','artist','media','starring','director','originalName','country','worldRegion','region','dataTour'
-			,'hotel_stars','room','meal','price_min','price_max','options','hall','hall_part','is_premiere','is_kids','oldprice')) )
+			,'hotel_stars','room','meal','price_min','price_max','options','hall','hall_part','is_premiere','is_kids','vat',)) )
 			return $this->add($method,$args[0]);
 
 		// флаги
@@ -84,16 +143,23 @@ class ymlOffer extends DomElement
 		return $this->$method($args);
 	}
 
+	protected function _minq($args)
+	{
+		$this->check(	!is_int($args[0]) || $args[0]<1		 , "min-quantity должен содержать только цифры"	);
+		return $this->add('min-quantity',$args[0]);
+	}
+
+	protected function _stepq($args)
+	{
+		$this->check(	!is_int($args[0]) || $args[0]<1 	, "step-quantity должен содержать только цифры"	);
+		return $this->add('step-quantity',$args[0]);
+	}
+
 	protected function _page_extent($args)
 	{
-		if( !is_int($args[0]) )		throw new RuntimeException("page_extent должен содержать только цифры");
-		if($args[0]<0)				throw new RuntimeException("page_extent должен быть положительным числом");
+		$this->check(	!is_int($args[0])	, "page_extent должен содержать только цифры"	);
+		$this->check(	$args[0]<0			, "page_extent должен быть положительным числом"	);
 		return $this->add('page_extent',$args[0]);
-	}
-	
-	protected function _description($args)
-	{
-		return $this->addStr('description',$args[0],175);
 	}
 
 
@@ -105,7 +171,7 @@ class ymlOffer extends DomElement
 
 	protected function _age($args)	
 	{ 
-		if( !is_int($args[0]))	throw new RuntimeException("age должен иметь тип int");
+		$this->check(	!is_int($args[0]) , 	"age должен иметь тип int" );
 
 		$ageEl 	= new DomElement( 'age',$args[0] );
 		$this->appendChild($ageEl);
@@ -114,17 +180,15 @@ class ymlOffer extends DomElement
 		switch ($args[1]) 
 		{
 			case 'year':
-				if(!in_array($args[0],array(0,6,12,16,18)))
-					throw new RuntimeException("age при age_unit=year должен быть 0, 6, 12, 16 или 18");
+				$this->check(	!in_array($args[0],array(0,6,12,16,18)) , "age при age_unit=year должен быть 0, 6, 12, 16 или 18"	);
 				break;
 
 			case 'month':
-				if( ($args[0]<0)||($args[0]>12) )
-					throw new RuntimeException("age при age_unit=month должен быть 0<=age<=12");
+				$this->check(	($args[0]<0)||($args[0]>12) 			, "age при age_unit=month должен быть 0<=age<=12"	);
 				break;
 			
 			default:
-					throw new RuntimeException("age unit должен быть month или year");
+				$this->check(	true , 									"age unit должен быть month или year"	);
 				break;
 		}
 		return $this;
@@ -143,38 +207,46 @@ class ymlOffer extends DomElement
 	protected function _picture( $args )
 	{
 		$pics	= $this->getElementsByTagName('picture');
-		if($pics->length >10)		throw new RuntimeException("Можно использовать максимум 10 картинок");
+		$this->check(	$pics->length >10	 , "Можно использовать максимум 10 картинок"	);
 		$this->addStr('picture',$args[0],512);
 		return $this;
 	}
 
+	
+	protected function _group_id($args)
+	{
+		$this->check(	!is_int($args[0])	 , "group_id должен содержать только цифры"	);
+		$this->check(	strlen($args[0])>9	 , "group_id не должен быть длинне 9 символов"	);
+		return $this->add('group_id',$args[0]);
+	}
+
+
 	protected function _barcode($args)
 	{
-		if( !is_int($args[0]) )		throw new RuntimeException("barcode должен содержать только цифры");
 		$len 	= strlen($args[0]);
-		if( !($len==8 || $len==12 || $len==13) ) throw new RuntimeException("barcode должен содержать 8, 12 или 13 цифр");
+		$this->check(	!is_int($args[0])	 				, "barcode должен содержать только цифры"	);
+		$this->check(	!($len==8 || $len==12 || $len==13)	, "barcode должен содержать 8, 12 или 13 цифр"	);
 		return $this->add('barcode',$args[0]);
 	}
 
 
 	protected function _year($args)
 	{
-		if( !is_int($args[0]) ) throw new RuntimeException("year должен быть int");
+		$this->check(	!is_int($args[0])	 , 	"year должен быть int" );
 		return $this->add('year',$args[0]);
 	}
 
 
 	protected function _dimensions($args)
 	{		
-		if( !is_float($args[0]) || !is_float($args[1]) || !is_float($args[2]) ) 
-			throw new RuntimeException("dimensions должен быть float");
+		$this->check(	!is_float($args[0]) || !is_float($args[1]) || !is_float($args[2])	 , "dimensions должен быть float"	);
 		return $this->add('dimensions',$args[0].'/'.$args[1].'/'.$args[2]);
 	}
 
 
 	protected function _weight($args)
 	{		
-		if( !is_float($args[0]) ) throw new RuntimeException("weight должен быть float");
+		$this->check(	!is_float($args[0])	 				, "weight должен быть float"	);
 		return $this->add('weight',$args[0]);
 	}
 
@@ -184,9 +256,14 @@ class ymlOffer extends DomElement
 		return $this->add('cpa', ($args[0])?'1':'0' );
 	}
 
+	protected function check($expr , $msg)
+	{
+		if( $expr ) throw new RuntimeException($msg);
+	}
+
 	public function addStr( $name,$val,$limit )
 	{
-		if( $limit && ( mb_strlen($val,"UTF-8")>$limit) )	throw new RuntimeException("$item должен быть короче $limit символов");
+		$this->check(	$limit && ( mb_strlen($val,$this->enc)>$limit) , 	"$name должен быть короче $limit символов");
 		return $this->add( $name,$val );
 	}
 
