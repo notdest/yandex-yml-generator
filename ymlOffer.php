@@ -17,7 +17,7 @@ class ymlOffer extends DomElement
 		$this->type = $type;
 		$p=array( 
 			'simple' 	=>		array('group_id','minq','stepq','model','expiry','picture','weight','vat','age','store','pickup','delivery','vendor','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','downloadable','adult','barcode','cpa','rec','param','dimensions'),
-			'arbitrary' =>		array('picture','vat','age','store','pickup','delivery','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param','downloadable','typePrefix','rec','expiry','weight','dimensions'),
+			'arbitrary' =>		array('group_id','picture','minq','stepq','vat','age','store','pickup','delivery','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param','downloadable','typePrefix','rec','expiry','weight','dimensions'),
 			'book'		=>		array('picture','vat','age','store','pickup','delivery','downloadable','author','publisher','series','year','ISBN','volume','part','language','binding','page_extent','table_of_contents'),
 			'audiobook' =>		array('picture','vat','age','downloadable','author','publisher','series','year','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
 			'music' 	=>		array('picture','vat','age','store','pickup','delivery','barcode','year','media','artist'),

@@ -22,7 +22,7 @@ vat 					|						-					|
 **categoryId**			| 		целое, >0, не длиннее 18 зн.		| в конструкторе
 `picture`				| 	максимум 10 шт. Длина url <= 512 		| `pic()`
 delivery				|			boolean							|
-delivery-options		| не больше 5 шт, int и тирэ, и т.д.		|
+delivery-options		| не больше 5 шт, int и тирэ, и т.д.		| `dlvOption()`
 pickup					|					boolean					|
 store					|					boolean					|
 description				| 		длина <= 3000, возможен CDATA		|
@@ -33,7 +33,7 @@ manufacturer_warranty	|			boolean							| `warranty()`
 country_of_origin		|						-					| `origin()`
 adult					|					boolean					|
 barcode					| 			целое, 8, 12 или 13 цифр		|
-cpa						| 			boolean, 0 или 1 на ыходе		|
+cpa						| 			boolean, 0 или 1 на выходе		|
 `param`					|						-					| 
 expiry					|						-					| 
 weight					| 					float , кг				|

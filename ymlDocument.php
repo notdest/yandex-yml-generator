@@ -155,16 +155,14 @@ class ymlDocument extends DomDocument
 	}
 
 
-	public function arbitrary( $price, $currency,$category,$vendor,$model, $url='' )
+	public function arbitrary( $model, $vendor, $id, $price, $currency, $category, $from = NULL )
 	{
-		$offer 		= $this->newOffer( $price, $currency,$category,'arbitrary',$url);
+		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'arbitrary', $from );
 		$offer->setAttribute('type', 'vendor.model');
 		$offer->add('vendor',$vendor);
 		$offer->add('model',$model);
 		return $offer;
 	}
-
-
 
 
 	public function book( $price, $currency,$category,$name, $url='' )
@@ -174,7 +172,6 @@ class ymlDocument extends DomDocument
 		$offer->add('name',$name);
 		return $offer;
 	}
-
 
 
 
