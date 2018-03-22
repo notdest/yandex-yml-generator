@@ -1,5 +1,7 @@
 YmlOffer Class
 ============
+Смотри исходник, а не визуализацию в браузере
+
 http://php.net/manual/ru/class.domelement.php
 
 
