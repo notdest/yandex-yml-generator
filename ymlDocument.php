@@ -8,10 +8,10 @@
 class ymlDocument extends DomDocument 
 {
 
-	protected $currencies 	;
-	protected $categories 	;
-	protected $offers		;
-	protected $shop 		;	
+	protected $currencies 			;
+	protected $categories 			;
+	protected $offers		= NULL	;
+	protected $shop 				;	
 
 
 	public function __construct($name, $company ,$enc = "UTF-8")		// или windows-1251
@@ -32,12 +32,10 @@ class ymlDocument extends DomDocument
 		$this 	->add('name'	,$name)
 				->add('company'	,$company)
 			 	->add('currencies')
-				->add('categories')
-				->add('offers');
+				->add('categories');
 
 		$this->currencies 	= $this->getElementsByTagName('currencies'	)->item(0);
 		$this->categories 	= $this->getElementsByTagName('categories'	)->item(0);
-		$this->offers 		= $this->getElementsByTagName('offers'		)->item(0);
 	}
 
 
@@ -150,7 +148,6 @@ class ymlDocument extends DomDocument
 	public function simple( $name, $id, $price, $currency, $category, $from = NULL )
 	{
 		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'simple', $from );
-		$offer->addStr('name',$name,120);
 		return $offer;
 	}
 
@@ -164,12 +161,16 @@ class ymlDocument extends DomDocument
 		return $offer;
 	}
 
-
-	public function book( $price, $currency,$category,$name, $url='' )
+/*
+ $price, $currency,$category,$name, $url='' 
+ $id, $price, $currency, $category, $from = NULL 
+,age,id,price,currencyId,categoryId*/
+	public function book($name, $publisher, $age, $age_u)
 	{
 		$offer 		= $this->newOffer( $price, $currency,$category,'book',$url);
 		$offer->setAttribute('type', 'book');
-		$offer->add('name',$name);
+		$offer->addStr('name',$name,120);
+		$offer->add('publisher',$publisher);
 		return $offer;
 	}
 
@@ -229,6 +230,12 @@ class ymlDocument extends DomDocument
 	protected function newOffer( $id, $price, $currency, $category, $type, $from )
 	{
 		$offer 			= new ymlOffer($type,$this->encoding);
+
+		if ( is_null($this->offers)) {							// пришлось разместить здесь, а не в конструкторе
+			$this->add('offers');								// иначе offers не в конце, и валидация не проходит
+			$this->offers 		= $this->getElementsByTagName('offers'		)->item(0);
+		}
+
 		$this->offers->appendChild($offer);  	
 
 		if(preg_match("/[^a-z,A-Z,0-9]/",$id)) 		$this->exc("id должен содержать только латинские буквы и цифры");

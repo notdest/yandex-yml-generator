@@ -46,4 +46,5 @@
 |dimensions				| 		3 раза float, сантиметры			|
 |downloadable			|					boolean					|
 |age					| если year, то 0,6,12,16 или 18 <br> если month, то от 0 до 12| 
+|group_id				| 		int, до 9 символов, атрибут			|
 |rec					|						-					| 

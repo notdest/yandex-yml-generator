@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-header('Content-Type: text/xml; charset=utf-8');
 include('../ymlOffer.php');
 include("../ymlDocument.php");
 
@@ -54,7 +53,7 @@ $offer = $y->arbitrary( '3811', 'Brand', 'id01id1111', 900, "USD", 15 /* , true*
 			->url("http://magaz.ru/tovar.html")					// !!!	условно обязательный. URL страницы товара 
 
 			->oldprice(1500)									//   	Старая цена для расчёта скидки
-			->vat('VAT_10_110')									//		Ставка НДС для товара.
+			//->vat('VAT_10_110')			отсутствует в схеме	//		Ставка НДС для товара.
 
 			->pic('http://best.seller.ru/img/device12345.jpg')	// !!!  условно обязательные. Картинки
 			->pic('http://best.seller.ru/img/device124.jpg')
@@ -80,8 +79,8 @@ $offer = $y->arbitrary( '3811', 'Brand', 'id01id1111', 900, "USD", 15 /* , true*
 			// ->description('Просто описание')					//		или просто описание
 
 			->sale('первым десяти покупателям скидка 15%')		//		sales_notes, минимальные суммы и партии, наличие скидок и т.д.	
-			->minq(2)											//	~	только в некоторых категориях. min-quantity ,минимальный заказ 2шт.
-			->stepq(2)											//	~	только в некоторых категориях. step-quantity , заказывыем по 2шт.
+			//->minq(2)						отсутствует в схеме	//	~	только в некоторых категориях. min-quantity ,минимальный заказ 2шт.
+			//->stepq(2)					отсутствует в схеме	//	~	только в некоторых категориях. step-quantity , заказывыем по 2шт.
 
 			->warranty()										//		manufacturer_warranty Официальная гарантия производителя.
 			->origin('Демократическая Республика Конго')		//   	country_of_origin. страна производитель из списка Яндекса. Иногда желательно указывать
@@ -102,6 +101,11 @@ $offer = $y->arbitrary( '3811', 'Brand', 'id01id1111', 900, "USD", 15 /* , true*
 			->rec('123123,1214,243')							//		айдишники рекомендованных товаров
 ;
 
+
+if ( !$y->schemaValidate('./shops_with_byn.xsd')) die(); 	// схема из тех. требований Яндекса
+
+
+header('Content-Type: text/xml; charset=utf-8');
 echo $y->saveXML();
 
 

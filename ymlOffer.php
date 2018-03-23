@@ -18,8 +18,8 @@ class ymlOffer extends DomElement
 		$p=array( 
 			'simple' 	=>		array('group_id','minq','stepq','model','expiry','picture','weight','vat','age','store','pickup','delivery','vendor','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','downloadable','adult','barcode','cpa','rec','param','dimensions'),
 			'arbitrary' =>		array('group_id','picture','minq','stepq','vat','age','store','pickup','delivery','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param','downloadable','typePrefix','rec','expiry','weight','dimensions'),
-			'book'		=>		array('picture','vat','age','store','pickup','delivery','downloadable','author','publisher','series','year','ISBN','volume','part','language','binding','page_extent','table_of_contents'),
-			'audiobook' =>		array('picture','vat','age','downloadable','author','publisher','series','year','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
+			'book'		=>		array('picture','vat','age','store','pickup','delivery','downloadable','author','series','year','ISBN','volume','part','language','binding','page_extent','table_of_contents'),
+			'audiobook' =>		array('picture','vat','age','downloadable','author','series','year','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
 			'music' 	=>		array('picture','vat','age','store','pickup','delivery','barcode','year','media','artist'),
 			'video' 	=>		array('picture','vat','age','store','pickup','delivery','adult','barcode','year','media','starring','director','originalName','country'),
 			'tour' 		=>		array('picture','vat','age','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','options'),
@@ -126,7 +126,7 @@ class ymlOffer extends DomElement
 		$this->check(	!in_array( $method,$this->permitted )		 , "$method вызван при типе товара {$this->type}"	);
 
 		// значения, которые просто добавляем
-		if( in_array($method, array('model','series','publisher','author','vendorCode','vendor','expiry','rec',
+		if( in_array($method, array('model','series','author','vendorCode','vendor','expiry','rec',
 			'typePrefix','country_of_origin','ISBN','volume','part','language','binding','table_of_contents','performed_by',
 			'performance_type','storage','format','recording_length','artist','media','starring','director','originalName','country','worldRegion','region','dataTour'
 			,'hotel_stars','room','meal','price_min','price_max','options','hall','hall_part','is_premiere','is_kids','vat',)) )
@@ -216,8 +216,9 @@ class ymlOffer extends DomElement
 	protected function _group_id($args)
 	{
 		$this->check(	!is_int($args[0])	 , "group_id должен содержать только цифры"	);
-		$this->check(	strlen($args[0])>9	 , "group_id не должен быть длинне 9 символов"	);
-		return $this->add('group_id',$args[0]);
+		$this->check(	strlen($args[0])>9	 , "group_id не должен быть длиннее 9 символов"	);
+		$this->setAttribute('group_id',$args[0] );
+		return $this;
 	}
 
 
