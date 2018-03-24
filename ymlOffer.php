@@ -16,16 +16,18 @@ class ymlOffer extends DomElement
 		parent::__construct('offer');
 		$this->type = $type;
 		$p=array( 
-			'simple' 	=>		array('group_id','minq','stepq','model','expiry','picture','weight','vat','age','store','pickup','delivery','vendor','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','downloadable','adult','barcode','cpa','rec','param','dimensions'),
-			'arbitrary' =>		array('group_id','picture','minq','stepq','vat','age','store','pickup','delivery','vendorCode','sales_notes','manufacturer_warranty','country_of_origin','adult','barcode','cpa','param','downloadable','typePrefix','rec','expiry','weight','dimensions'),
-			'book'		=>		array('picture','vat','age','store','pickup','delivery','downloadable','author','series','year','ISBN','volume','part','language','binding','page_extent','table_of_contents'),
+			'simple' 	=>		array('group_id','minq','stepq','model','expiry','picture','weight','vat','age','store','pickup','delivery','vendor','vendorCode','manufacturer_warranty','downloadable','adult','rec','dimensions'),
+			'arbitrary' =>		array('group_id','picture','minq','stepq','vat','age','store','pickup','delivery','vendorCode','manufacturer_warranty','adult','downloadable','typePrefix','rec','expiry','weight','dimensions'),
+			'book'		=>		array('picture','vat','age','store','pickup','manufacturer_warranty','delivery','downloadable','author','series','year','ISBN','volume','part','language','binding','page_extent','minq','stepq','adult','table_of_contents','expiry','weight','dimensions'),
 			'audiobook' =>		array('picture','vat','age','downloadable','author','series','year','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
-			'music' 	=>		array('picture','vat','age','store','pickup','delivery','barcode','year','media','artist'),
-			'video' 	=>		array('picture','vat','age','store','pickup','delivery','adult','barcode','year','media','starring','director','originalName','country'),
+			'music' 	=>		array('picture','vat','age','store','pickup','delivery','year','media','artist'),
+			'video' 	=>		array('picture','vat','age','store','pickup','delivery','adult','year','media','starring','director','originalName','country'),
 			'tour' 		=>		array('picture','vat','age','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','options'),
 			'event' 	=>		array('picture','vat','age','store','pickup','delivery','hall','hall_part','is_premiere','is_kids'));
 
-		$this->permitted 	= $p[$type];
+		$p_all =array('sales_notes','country_of_origin','barcode','cpa','param'); // методы для всех
+
+		$this->permitted 	= array_merge( $p[$type],$p_all ) ;
 
 		$this->enc 			= $enc ;
 	}

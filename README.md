@@ -12,6 +12,8 @@ Yml генератор на php
 [Общие поля магазина](https://yandex.ru/support/partnermarket/export/yml.html)			| [Общие поля магазина](docs/yml.md)
 [Упрощенный тип](https://yandex.ru/support/partnermarket/offers.html)					| [Упрощенный тип](docs/simple.md)
 [Произвольный тип](https://yandex.ru/support/partnermarket/export/vendor-model.html)	| [Произвольный тип](docs/arbitrary.md)
+|																						|
+[Книги](https://yandex.ru/support/partnermarket/export/books.html)						| [Книги](docs/book.md)
 
 Остальные типы пока на подходе. Кстати не обязательно их все проверять, используются обычно общие поля и какой-то один тип.
 
@@ -31,6 +33,8 @@ $offer	->cbid(80)				//	Размер ставки на карточке това
 ----------------| ------------- 										| -------
 Упрощенный		| [examples/simple.php](examples/simple.php)			| 24.03.2018
 Произвольный 	| [examples/arbitrary.php](examples/arbitrary.php)		| 24.03.2018
+|				|														|
+Книги			| [examples/book.php](examples/book.php)				| 24.03.2018
 
 Остальные будут немного позже. Валидация проводилась с помощью [сервиса Яндекса](https://webmaster.yandex.ru/tools/xml-validator/), указывая тип *"Маркет"*.
 

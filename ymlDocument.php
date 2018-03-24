@@ -161,16 +161,14 @@ class ymlDocument extends DomDocument
 		return $offer;
 	}
 
-/*
- $price, $currency,$category,$name, $url='' 
- $id, $price, $currency, $category, $from = NULL 
-,age,id,price,currencyId,categoryId*/
-	public function book($name, $publisher, $age, $age_u)
+
+	public function book($name, $publisher, $age, $age_u, $id, $price, $currency, $category, $from = NULL)
 	{
-		$offer 		= $this->newOffer( $price, $currency,$category,'book',$url);
+		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'book', $from );
 		$offer->setAttribute('type', 'book');
 		$offer->addStr('name',$name,120);
 		$offer->add('publisher',$publisher);
+		$offer->age($age,$age_u);
 		return $offer;
 	}
 
