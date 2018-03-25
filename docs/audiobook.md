@@ -24,7 +24,7 @@
 |performance_type		|						-					|performance('радиоспектакль')
 |storage				|						-					|
 |format					|						-					|
-|recording_length		|						-					|length('45.30')
+|recording_length		|						-					|`length()`
 |**id** 				| Цифры и буквы, до 20 символов, атрибут	| в конструкторе
 |cbid 					| 			int, атрибут					|
 |bid 					| 			int, атрибут					|
@@ -45,33 +45,6 @@
 |`sales_notes`			| 				длина <= 50					|  `sale()`
 |min-quantity 			| 			int >= 1						| `minq()`
 |step-quantity			| 			int >= 1						| `stepq()`	
-
-|sales_notes			|			|!
-|min-quantity			|			|
-|step-quantity			|			|
-|manufacturer_warranty	|			|
-|country_of_origin		|			|
-|adult					|			|
-|barcode				|			|
-|cpa					|			|
-|param					|			|!
-|expiry					|			|
-|weight					|			|
-|dimensions				|			|
-|downloadable			|			|
-|age					|			|
-
-|age					| если year, то 0,6,12,16 или 18 <br> если month, то от 0 до 12| в конструкторе
-
-
-
-
-
-
-
-|sales_notes			| 				длина <= 50					|  `sale()`
-|min-quantity 			| 			int >= 1						| `minq()`
-|step-quantity			| 			int >= 1						| `stepq()`
 |manufacturer_warranty	|			boolean							| `warranty()`
 |country_of_origin		|						-					| `origin()`
 |adult					|					boolean					|
@@ -82,3 +55,4 @@
 |weight					| 					float , кг				|
 |dimensions				| 		3 раза float, сантиметры			|
 |downloadable			|					boolean					|
+|age					| если year, то 0,6,12,16 или 18 <br> если month, то от 0 до 12|
