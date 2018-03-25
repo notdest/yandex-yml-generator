@@ -19,7 +19,7 @@ class ymlOffer extends DomElement
 			'simple' 	=>		array('group_id','minq','stepq','model','expiry','picture','weight','vat','age','store','pickup','delivery','vendor','vendorCode','manufacturer_warranty','downloadable','adult','rec','dimensions'),
 			'arbitrary' =>		array('group_id','picture','minq','stepq','vat','age','store','pickup','delivery','vendorCode','manufacturer_warranty','adult','downloadable','typePrefix','rec','expiry','weight','dimensions'),
 			'book'		=>		array('picture','vat','age','store','pickup','manufacturer_warranty','delivery','downloadable','author','series','year','ISBN','volume','part','language','binding','page_extent','minq','stepq','adult','table_of_contents','expiry','weight','dimensions'),
-			'audiobook' =>		array('picture','vat','age','downloadable','author','series','year','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
+			'audiobook' =>		array('picture','adult','manufacturer_warranty','vat','minq','stepq','store','pickup','age','downloadable','author','series','year','delivery','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length','expiry','weight','dimensions'),
 			'music' 	=>		array('picture','vat','age','store','pickup','delivery','year','media','artist'),
 			'video' 	=>		array('picture','vat','age','store','pickup','delivery','adult','year','media','starring','director','originalName','country'),
 			'tour' 		=>		array('picture','vat','age','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','options'),

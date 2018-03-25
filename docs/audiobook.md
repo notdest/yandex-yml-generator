@@ -1,12 +1,11 @@
-Поля для типа "Книги"
+Поля для типа "Аудиокниги"
 ============
 
-Аналогичная таблица внизу [документации Яндекса](https://yandex.ru/support/partnermarket/export/books.html).
+Аналогичная таблица внизу [документации Яндекса](https://yandex.ru/support/partnermarket/export/audiobooks.html).
 
 Если поле выделено **жирным**, значит оно в конструкторе и обязательное, создать описание без него не получится. Если название(именно название ) поля выделено `как код`, то скрипт будет работать и без него, но в комментариях есть пометка, что в некоторых случаях оно обязательно. Также, если стоит ограничение, например int, то переменная должна быть приведена именно к этому типу, а не просто содержать число. В противном случае код вывалит исключение.
 
 Параметры копировал как в документации, возможно они бредовые, смотри на конкурентов в выдаче.
-
 
 Название	 			| 			Ограничение						| Псевдоним	
 ----------------------- | 			------------- 					|------------
@@ -20,10 +19,12 @@
 |part					|						-(было лень)		|
 |language				|						-					|
 |table_of_contents		|						-					| `contents()`
-|type					|  					=book 					| спрятан в конструкторе
-|binding				|						-					|
-|page_extent			|					int >= 0				| `pages()`
-|**age**					| если year, то 0,6,12,16 или 18 <br> если month, то от 0 до 12| в конструкторе
+|type					|  					=audiobook 				| спрятан в конструкторе
+|performed_by			|						-					|performer('Николай Фоменко')
+|performance_type		|						-					|performance('радиоспектакль')
+|storage				|						-					|
+|format					|						-					|
+|recording_length		|						-					|length('45.30')
 |**id** 				| Цифры и буквы, до 20 символов, атрибут	| в конструкторе
 |cbid 					| 			int, атрибут					|
 |bid 					| 			int, атрибут					|
@@ -41,6 +42,33 @@
 |pickup					|					boolean					|
 |store					|					boolean					|
 |description			| 		длина <= 3000, возможен CDATA		|
+|`sales_notes`			| 				длина <= 50					|  `sale()`
+|min-quantity 			| 			int >= 1						| `minq()`
+|step-quantity			| 			int >= 1						| `stepq()`	
+
+|sales_notes			|			|!
+|min-quantity			|			|
+|step-quantity			|			|
+|manufacturer_warranty	|			|
+|country_of_origin		|			|
+|adult					|			|
+|barcode				|			|
+|cpa					|			|
+|param					|			|!
+|expiry					|			|
+|weight					|			|
+|dimensions				|			|
+|downloadable			|			|
+|age					|			|
+
+|age					| если year, то 0,6,12,16 или 18 <br> если month, то от 0 до 12| в конструкторе
+
+
+
+
+
+
+
 |sales_notes			| 				длина <= 50					|  `sale()`
 |min-quantity 			| 			int >= 1						| `minq()`
 |step-quantity			| 			int >= 1						| `stepq()`

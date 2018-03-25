@@ -173,12 +173,12 @@ class ymlDocument extends DomDocument
 	}
 
 
-
-	public function audiobook( $price, $currency,$category,$name, $url='' )
+	public function audiobook( $name, $publisher, $id, $price, $currency, $category, $from = NULL )
 	{
-		$offer 		= $this->newOffer( $price, $currency,$category,'audiobook',$url);
+		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'audiobook', $from );
 		$offer->setAttribute('type', 'audiobook');
-		$offer->add('name',$name);
+		$offer->addStr('name',$name,120);
+		$offer->add('publisher',$publisher);
 		return $offer;
 	}
 
