@@ -21,8 +21,7 @@ class ymlOffer extends DomElement
 			'book'		=>		array('picture','vat','age','store','pickup','manufacturer_warranty','delivery','downloadable','author','series','year','ISBN','volume','part','language','binding','page_extent','minq','stepq','adult','table_of_contents','expiry','weight','dimensions'),
 			'audiobook' =>		array('picture','adult','manufacturer_warranty','vat','minq','stepq','store','pickup','age','downloadable','author','series','year','delivery','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length','expiry','weight','dimensions'),
 			'artist' 	=>		array('picture','minq','manufacturer_warranty','stepq','adult','vat','age','store','pickup','delivery','year','media','artist','expiry','weight','dimensions','downloadable','starring','director','originalName','country'),
-			'video' 	=>		array('picture','vat','age','store','pickup','delivery','adult','year','media'),
-			'tour' 		=>		array('picture','vat','age','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','options'),
+			'tour' 		=>		array('picture','minq','stepq','vat','manufacturer_warranty','age','adult','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','expiry','weight','dimensions','downloadable','options'),
 			'event' 	=>		array('picture','vat','age','store','pickup','delivery','hall','hall_part','is_premiere','is_kids'));
 
 		$p_all =array('sales_notes','country_of_origin','barcode','cpa','param'); // методы для всех
@@ -131,7 +130,7 @@ class ymlOffer extends DomElement
 		if( in_array($method, array('model','series','author','vendorCode','vendor','expiry','rec',
 			'typePrefix','country_of_origin','ISBN','volume','part','language','binding','table_of_contents','performed_by',
 			'performance_type','storage','format','recording_length','artist','media','starring','director','originalName','country','worldRegion','region','dataTour'
-			,'hotel_stars','room','meal','price_min','price_max','options','hall','hall_part','is_premiere','is_kids','vat',)) )
+			,'hotel_stars','room','meal','price_min','price_max','options','hall','hall_part','is_premiere','is_kids','vat')) )
 			return $this->add($method,$args[0]);
 
 		// флаги

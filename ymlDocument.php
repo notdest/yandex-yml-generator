@@ -192,12 +192,15 @@ class ymlDocument extends DomDocument
 	}
 
 
-	public function tour( $price, $currency,$category,$name,$days,$included,$transport, $url='' )
+	public function tour( $name,$days,$included,$transport, $id, $price, $currency, $category, $from = NULL )
 	{
-		$offer 		= $this->newOffer( $price, $currency,$category,'tour',$url);
-		$offer->setAttribute('type', 'event-ticket');
+		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'tour', $from );
+		$offer->setAttribute('type', 'tour');
 		$offer->add('name',$name);
+
+		if( !is_int($days) || $days<0 ) 			$this->exc("days должно быть целым и положительным");
 		$offer->add('days',$days);
+		
 		$offer->add('included',$included);
 		$offer->add('transport',$transport);
 		return $offer;
@@ -207,7 +210,7 @@ class ymlDocument extends DomDocument
 	public function event( $price, $currency,$category,$name,$place,$date, $url='' )
 	{
 		$offer 		= $this->newOffer( $price, $currency,$category,'event',$url);
-		$offer->setAttribute('type', 'tour');
+		$offer->setAttribute('type', 'aaaaaaaaaaa');
 		$offer->add('name',$name);
 		$offer->add('place',$place);
 		$offer->add('date',$date);
