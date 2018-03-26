@@ -22,7 +22,7 @@ class ymlOffer extends DomElement
 			'audiobook' =>		array('picture','adult','manufacturer_warranty','vat','minq','stepq','store','pickup','age','downloadable','author','series','year','delivery','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length','expiry','weight','dimensions'),
 			'artist' 	=>		array('picture','minq','manufacturer_warranty','stepq','adult','vat','age','store','pickup','delivery','year','media','artist','expiry','weight','dimensions','downloadable','starring','director','originalName','country'),
 			'tour' 		=>		array('picture','minq','stepq','vat','manufacturer_warranty','age','adult','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','expiry','weight','dimensions','downloadable','options'),
-			'event' 	=>		array('picture','vat','age','store','pickup','delivery','hall','hall_part','is_premiere','is_kids'));
+			'event' 	=>		array('picture','manufacturer_warranty','minq','stepq','adult','vat','age','store','pickup','delivery','hall','hall_part','expiry','weight','dimensions','downloadable','is_premiere','is_kids'));
 
 		$p_all =array('sales_notes','country_of_origin','barcode','cpa','param'); // методы для всех
 

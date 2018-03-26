@@ -200,17 +200,17 @@ class ymlDocument extends DomDocument
 
 		if( !is_int($days) || $days<0 ) 			$this->exc("days должно быть целым и положительным");
 		$offer->add('days',$days);
-		
+
 		$offer->add('included',$included);
 		$offer->add('transport',$transport);
 		return $offer;
 	}
 
 
-	public function event( $price, $currency,$category,$name,$place,$date, $url='' )
+	public function event(  $name,$place,$date, $id, $price, $currency, $category, $from = NULL)
 	{
-		$offer 		= $this->newOffer( $price, $currency,$category,'event',$url);
-		$offer->setAttribute('type', 'aaaaaaaaaaa');
+		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'event', $from );
+		$offer->setAttribute('type', 'event-ticket');
 		$offer->add('name',$name);
 		$offer->add('place',$place);
 		$offer->add('date',$date);

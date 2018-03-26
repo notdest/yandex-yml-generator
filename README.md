@@ -16,6 +16,7 @@ Yml генератор на php
 [Аудиокниги](https://yandex.ru/support/partnermarket/export/audiobooks.html)			| [Аудиокниги](docs/audiobook.md)
 [Аудио и видеопродукция](https://yandex.ru/support/partnermarket/export/music-video.html)| [Аудио и видеопродукция](docs/artist.md)
 [Туры](https://yandex.ru/support/partnermarket/export/tours.html)						| [Туры](docs/tour.md)
+[Мероприятия](https://yandex.ru/support/partnermarket/export/event-tickets.html)		| [Мероприятия](docs/event.md)
 
 Остальные типы пока на подходе. Кстати не обязательно их все проверять, используются обычно общие поля и какой-то один тип.
 
@@ -39,6 +40,7 @@ $offer	->cbid(80)				//	Размер ставки на карточке това
 Аудиокниги				| [examples/audiobook.php](examples/audiobook.php)		| 25.03.2018
 Аудио и видеопродукция	| [examples/artist.php](examples/artist.php)			| 26.03.2018
 Туры					| [examples/tour.php](examples/tour.php)				| 26.03.2018
+Мероприятия				| [examples/event.php](examples/event.php)				| 26.03.2018
 
 Остальные будут немного позже. Валидация проводилась с помощью [сервиса Яндекса](https://webmaster.yandex.ru/tools/xml-validator/), указывая тип *"Маркет"*.
 
