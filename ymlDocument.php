@@ -183,21 +183,11 @@ class ymlDocument extends DomDocument
 	}
 
 
-
-	public function music( $price, $currency,$category,$name, $url='' )
+	public function artist( $title, $id, $price, $currency, $category, $from = NULL )
 	{
-		$offer 		= $this->newOffer( $price, $currency,$category,'music',$url);
+		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'artist', $from );
 		$offer->setAttribute('type', 'artist.title');
-		$offer->add('title',$name);
-		return $offer;
-	}
-
-
-	public function video( $price, $currency,$category,$name, $url='' )
-	{
-		$offer 		= $this->newOffer( $price, $currency,$category,'video',$url);
-		$offer->setAttribute('type', 'artist.title');
-		$offer->add('title',$name);
+		$offer->add('title',$title);
 		return $offer;
 	}
 

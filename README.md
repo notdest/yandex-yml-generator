@@ -14,6 +14,7 @@ Yml генератор на php
 [Произвольный тип](https://yandex.ru/support/partnermarket/export/vendor-model.html)	| [Произвольный тип](docs/arbitrary.md)
 [Книги](https://yandex.ru/support/partnermarket/export/books.html)						| [Книги](docs/book.md)
 [Аудиокниги](https://yandex.ru/support/partnermarket/export/audiobooks.html)			| [Аудиокниги](docs/audiobook.md)
+[Аудио и видеопродукция](https://yandex.ru/support/partnermarket/export/music-video.html)| [Аудио и видеопродукция](docs/artist.md)
 
 Остальные типы пока на подходе. Кстати не обязательно их все проверять, используются обычно общие поля и какой-то один тип.
 
@@ -29,12 +30,13 @@ $offer	->cbid(80)				//	Размер ставки на карточке това
 Здесь `arbitrary()` создает предложение типа «произвольный», в него вынесены гарантированно обязательные поля. Метод  `cbid()` уже не обязателен, его можно просто удалить, если он не нужен. Метод `url()` также можно удалить, но без него не будет работать модель «Переход на сайт» . Далее, метод `vat()` описан в документации, но отсутствует в xsd-схеме указанной в [технических требованиях](https://yandex.ru/support/webmaster/goods-prices/technical-requirements.html) и не проходит валидацию.
  Каждая строчка имеет комментарий, но тут возникают проблемы - в *Sublime Text* всё идеально, в встроенном в *linux Mint* блокноте изредка что-то уезжает, а вот на *github*-е уже прилично едет. Ну и с другими редакторами такое тоже бывает. Файлы примеров:
 
-Тип предложения	| 	Пример												| Дата валидации
-----------------| ------------- 										| -------
-Упрощенный		| [examples/simple.php](examples/simple.php)			| 24.03.2018
-Произвольный 	| [examples/arbitrary.php](examples/arbitrary.php)		| 24.03.2018
-Книги			| [examples/book.php](examples/book.php)				| 24.03.2018
-Аудиокниги		| [examples/audiobook.php](examples/audiobook.php)		| 25.03.2018
+Тип предложения			| 	Пример												| Дата валидации
+----------------		| ------------- 										| -------
+Упрощенный				| [examples/simple.php](examples/simple.php)			| 24.03.2018
+Произвольный 			| [examples/arbitrary.php](examples/arbitrary.php)		| 24.03.2018
+Книги					| [examples/book.php](examples/book.php)				| 24.03.2018
+Аудиокниги				| [examples/audiobook.php](examples/audiobook.php)		| 25.03.2018
+Аудио и видеопродукция	| [examples/artist.php](examples/artist.php)			| 26.03.2018
 
 Остальные будут немного позже. Валидация проводилась с помощью [сервиса Яндекса](https://webmaster.yandex.ru/tools/xml-validator/), указывая тип *"Маркет"*.
 
