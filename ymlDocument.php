@@ -218,6 +218,17 @@ class ymlDocument extends DomDocument
 	}
 
 
+	public function medicine( $name, $id, $price, $currency, $category, $from = NULL )
+	{
+		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'medicine', $from );
+		$offer->setAttribute('type', 'medicine');
+		$offer->add('name',$name);
+		$offer->pickup(true);
+		$offer->delivery(false);
+		return $offer;
+	}
+
+
 	protected function newOffer( $id, $price, $currency, $category, $type, $from )
 	{
 		$offer 			= new ymlOffer($type,$this->encoding);

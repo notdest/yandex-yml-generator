@@ -16,15 +16,16 @@ class ymlOffer extends DomElement
 		parent::__construct('offer');
 		$this->type = $type;
 		$p=array( 
-			'simple' 	=>		array('group_id','minq','stepq','model','expiry','picture','weight','vat','age','store','pickup','delivery','vendor','vendorCode','manufacturer_warranty','downloadable','adult','rec','dimensions'),
-			'arbitrary' =>		array('group_id','picture','minq','stepq','vat','age','store','pickup','delivery','vendorCode','manufacturer_warranty','adult','downloadable','typePrefix','rec','expiry','weight','dimensions'),
-			'book'		=>		array('picture','vat','age','store','pickup','manufacturer_warranty','delivery','downloadable','author','series','year','ISBN','volume','part','language','binding','page_extent','minq','stepq','adult','table_of_contents','expiry','weight','dimensions'),
-			'audiobook' =>		array('picture','adult','manufacturer_warranty','vat','minq','stepq','store','pickup','age','downloadable','author','series','year','delivery','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length','expiry','weight','dimensions'),
-			'artist' 	=>		array('picture','minq','manufacturer_warranty','stepq','adult','vat','age','store','pickup','delivery','year','media','artist','expiry','weight','dimensions','downloadable','starring','director','originalName','country'),
-			'tour' 		=>		array('picture','minq','stepq','vat','manufacturer_warranty','age','adult','store','pickup','delivery','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','expiry','weight','dimensions','downloadable','options'),
-			'event' 	=>		array('picture','manufacturer_warranty','minq','stepq','adult','vat','age','store','pickup','delivery','hall','hall_part','expiry','weight','dimensions','downloadable','is_premiere','is_kids'));
+			'simple' 	=>	array('group_id','minq','stepq','model','age','vendor','vendorCode','manufacturer_warranty','downloadable','adult','rec'),
+			'arbitrary' =>	array('group_id','minq','stepq','age','vendorCode','manufacturer_warranty','adult','downloadable','typePrefix','rec'),
+			'book'		=>	array('age','manufacturer_warranty','downloadable','author','series','year','ISBN','volume','part','language','binding','page_extent','minq','stepq','adult','table_of_contents'),
+			'audiobook' =>	array('adult','manufacturer_warranty','minq','stepq','age','downloadable','author','series','year','delivery','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
+			'artist' 	=>	array('minq','manufacturer_warranty','stepq','adult','age','year','media','artist','downloadable','starring','director','originalName','country'),
+			'tour' 		=>	array('minq','stepq','manufacturer_warranty','age','adult','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','downloadable','options'),
+			'event' 	=>	array('manufacturer_warranty','minq','stepq','adult','age','hall','hall_part','downloadable','is_premiere','is_kids'),
+			'medicine'	=>  array('vendorCode','vendor'));
 
-		$p_all =array('sales_notes','country_of_origin','barcode','cpa','param'); // методы для всех
+		$p_all =array('sales_notes','country_of_origin','barcode','cpa','param','pickup','delivery','store','picture','vat','expiry','weight','dimensions'); // методы для всех
 
 		$this->permitted 	= array_merge( $p[$type],$p_all ) ;
 
