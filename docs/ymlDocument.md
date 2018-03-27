@@ -1,47 +1,54 @@
 YmlDocument Class
 ============
 
-наследуется от http://php.net/manual/ru/class.domdocument.php
+Наследуется от [DomDocument](http://php.net/manual/ru/class.domdocument.php)
 
+`__construct($name, $company ,$enc = "UTF-8")` - тут создается сам xml и добавляются первые обязательные параметры.
 
-`__construct($name, $company ,$url ,$enc = "UTF-8")`
-Тут создается сам xml и добавляются первые обязательные параметры. **Их надо проверить!!!**
+---------
+Далее идет группа параметров самого магазина(общие поля):
 
-`cms($name,$version = false)`	добавляем cms и опционально версию
+`url($url)` - проверяем длину, 50 символов.
 
-`agency($name)` студия, тупо добавляем
+`cms($name,$version = false)` - добавляем cms и опционально версию.
 
-`email($mail)` валидируем и добавляем
+`agency($name)` - студия, просто добавляем.
 
-`function delivery($cost,$days,$before = -1)` добавить одну доставку. много проверок
+`email($mail)` - валидируем и добавляем.
 
-`cpa($val = true)`  на входе bool, на выходе "0" или "1"
+`delivery($cost,$days,$before = -1)` - добавить одну доставку. много проверок.
 
-`currency($id,$rate,$plus = 0)` проверяем отсутствие запятых в числах. Опционально надбавка сверху курса
+`cpa($val = true)` - на входе bool, на выходе "0" или "1".
 
-`category($id,$name,$parentId = false)` int > 0 . Опционально ид родителя
+`currency($id,$rate,$plus = 0)` - проверяем отсутствие запятых в числах. Опционально надбавка сверху курса.
+
+`category($id,$name,$parentId = false)` - id целые и положительные . Опционально id родителя.
 
 ------------------
+Далее идет группа функций, которые возвращают товарные предложения нужного типа.<br>
+ **Возможно требует внимания**, поскольку я часто забываю здесь установить обязательный параметр, или путаю значение для `type`.
 
-`simple( $price, $currency,$category,$name, $url='' )` - создаем упрощенный оффер, проверяем длину имени
+`simple( $name, $id, $price, $currency, $category, $from = NULL )` - создаем упрощенный оффер, проверяем длину имени.
 
-`arbitrary( $price, $currency,$category,$vendor,$model, $url='' )` - создаем произвольный оффер
+`arbitrary( $model, $vendor, $id, $price, $currency, $category, $from = NULL )` - создаем произвольный оффер.
 
-`book( $price, $currency,$category,$name, $url='' )` - оффер с книгами, на имя забил
+`book($name, $publisher, $age, $age_u, $id, $price, $currency, $category, $from = NULL)` - оффер с книгами.
 
-`audiobook( $price, $currency,$category,$name, $url='' )` - оффер с аудиокнигами, на имя забил
+`audiobook( $name, $publisher, $id, $price, $currency, $category, $from = NULL )` - оффер с аудиокнигами.
 
-`music( $price, $currency,$category,$name, $url='' )` - музыка, на имя забил
+`artist( $title, $id, $price, $currency, $category, $from = NULL )` - аудио и видеопродукция.
 
-`video( $price, $currency,$category,$name, $url='' )` - видео, name становится title
+`tour( $name,$days,$included,$transport, $id, $price, $currency, $category, $from = NULL )` - туры, побоялся устанавливать ограничение на длину имени.
 
-`tour( $price, $currency,$category,$name,$days,$included,$transport, $url='' )` - тур, явно напутал type
+`event(  $name,$place,$date, $id, $price, $currency, $category, $from = NULL)` - событие, длину имени тоже не ограничиваю.
 
-`event( $price, $currency,$category,$name,$place,$date, $url='' )` - событие, явно напутал type
+`medicine( $name, $id, $price, $currency, $category, $from = NULL )` - лекарства. Ряд параметров устанавливаю принудительно.
 
 ---------------
-`newOffer( $price, $currency,$category,$type,$url )` - служебная функция, **все сверху её юзают**
+Далее идет ряд служебных `protected`-функций:
 
-`exc($text)` - обижаемся и выкидываем исключени
+`newOffer( $id, $price, $currency, $category, $type, $from )` - вызывается при создании любого типа оффера, требует и проверяет поля обязательные для всех типов.
 
-`add($name,$value=false)` - добавляем элемент в этом, глобальном пространстве
+`exc($text)` - короткий псевдоним для выкидывания исключений.
+
+`add($name,$value=false)` - Добавляем элемент к элементу `shop`. Все общие поля магазина используют эту функцию.

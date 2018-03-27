@@ -20,8 +20,8 @@
 |language				|						-					|
 |table_of_contents		|						-					| `contents()`
 |type					|  					=audiobook 				| спрятан в конструкторе
-|performed_by			|						-					|performer('Николай Фоменко')
-|performance_type		|						-					|performance('радиоспектакль')
+|performed_by			|						-					|`performer()`
+|performance_type		|						-					|`performance()`
 |storage				|						-					|
 |format					|						-					|
 |recording_length		|						-					|`length()`

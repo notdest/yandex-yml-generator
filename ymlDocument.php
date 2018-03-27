@@ -148,6 +148,7 @@ class ymlDocument extends DomDocument
 	public function simple( $name, $id, $price, $currency, $category, $from = NULL )
 	{
 		$offer 		= $this->newOffer(  $id, $price, $currency, $category,'simple', $from );
+		$offer->addStr('name',$name,120);
 		return $offer;
 	}
 

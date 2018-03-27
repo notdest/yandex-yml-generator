@@ -19,9 +19,9 @@ version					|			-				| `cms()`
 agency					|			-				| 
 email					|		  email				| 
 `currencies`			| 	разделитель - точка		| `currency()`
-`categories`			| int > 0 для id и parentId	| 
-`delivery-options`		| не больше 5 шт, int и т.д.| 
-cpa						| boolean, 0 и 1 на выходе	| `delivery()`
+`categories`			| int > 0 для id и parentId	| `category()`
+`delivery-options`		| не больше 5 шт, int и т.д.| `delivery()`
+cpa						| boolean, 0 и 1 на выходе	| 
 offers					|							| в конструкторе соответсвующего<br> типа оффера
 
 
