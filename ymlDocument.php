@@ -1,17 +1,16 @@
 <?php
 
 
-
-
-
-
 class ymlDocument extends DomDocument 
 {
 
-	protected $currencies 			;
-	protected $categories 			;
-	protected $offers		= NULL	;
-	protected $shop 				;	
+	protected $currencies 					;
+	protected $categories 					;
+	protected $offer		= NULL			;
+	protected $shop 						;
+	protected $fp							;
+	protected $fname 		= './out.xml'	;
+	protected $bufferSize 	= NULL 			;
 
 
 	public function __construct($name, $company ,$enc = "UTF-8")		// или windows-1251
@@ -38,6 +37,15 @@ class ymlDocument extends DomDocument
 		$this->categories 	= $this->getElementsByTagName('categories'	)->item(0);
 	}
 
+	public function fileName($fname){
+		$this->fname = $fname;
+		return $this;
+	}
+
+	public function bufferSize($size){
+		$this->bufferSize = $size;
+		return $this;
+	}
 
 	public function url($url)
 	{
@@ -232,14 +240,29 @@ class ymlDocument extends DomDocument
 
 	protected function newOffer( $id, $price, $currency, $category, $type, $from )
 	{
-		$offer 			= new ymlOffer($type,$this->encoding);
 
-		if ( is_null($this->offers)) {							// пришлось разместить здесь, а не в конструкторе
-			$this->add('offers');								// иначе offers не в конце, и валидация не проходит
-			$this->offers 		= $this->getElementsByTagName('offers'		)->item(0);
-		}
+		if ( is_null($this->offer)) {											// если это первый оффер
+			$offers		= $this->add('offers',' ');								// добавляем элемент offers в DOM
+			$begining 	= $this->saveXML();										// и пишем поля магазина в новый файл
+			$begining 	= substr($begining, 0,strpos($begining, ' </offers>'));
+			$this->fp 	= fopen($this->fname, 'w');
+			if (!is_null($this->bufferSize)) {
+				stream_set_write_buffer($this->fp,$this->bufferSize);
+			}
+			fwrite($this->fp, $begining);
+			$this->offer 		= new ymlOffer($type,$this->encoding);
+			$offers->appendChild($this->offer);
+		}else{
+				fwrite($this->fp, $this->saveXML($this->offer));				// если это не первый оффер, то записываем предыдущий
 
-		$this->offers->appendChild($offer);  	
+				while ( $this->offer->firstChild ) {							// стираем все его элементы
+					$this->offer->removeChild($this->offer->firstChild);
+				}
+
+				while ( $this->offer->attributes->length) {						// и стираем все его аттрибуты
+					$this->offer->removeAttributeNode($this->offer->attributes->item(0));
+				}
+		}	
 
 		if(preg_match("/[^a-z,A-Z,0-9]/",$id)) 		$this->exc("id должен содержать только латинские буквы и цифры");
 		if( strlen($id)>20 )						$this->exc("id длиннее 20 символов");
@@ -253,15 +276,15 @@ class ymlDocument extends DomDocument
 			if( !is_bool($from) ) 					$this->exc('from должен быть boolean');
 		}
 
-		$offer 	->setAttribute('id',$id );
-		$offer 	->add('currencyId',$currency)
-				->add('categoryId',$category);
+		$this->offer 	->setAttribute('id',$id );
+		$this->offer 	->add('currencyId',$currency)
+						->add('categoryId',$category);
 
 		$pr 	= new DomElement('price',$price);
-		$offer->appendChild($pr);
+		$this->offer->appendChild($pr);
 		if( !is_null($from))		$pr->setAttribute('from',($from) ? 'true' :'false' );
 
-		return $offer;
+		return $this->offer;
 	}
 
 
@@ -281,6 +304,12 @@ class ymlDocument extends DomDocument
 		return $this ;
 	}
 
+
+   public function __destruct() {
+   		fwrite($this->fp, $this->saveXML($this->offer)); 									// пишем последний оффер и концовку
+   		fwrite($this->fp, '</offers></shop></yml_catalog>');
+		fclose($this->fp);
+   }
 }
 
 ?>
