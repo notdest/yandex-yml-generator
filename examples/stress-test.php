@@ -83,7 +83,7 @@ $iter ++;
 }
 
 echo " Пройдено $iter итераций<br>\n";
-echo "врем выполнения: ", time()-$start," сек.<br>\n";
+echo "время выполнения: ", time()-$start," сек.<br>\n";
 echo "максимальное использование памяти: ",memory_get_peak_usage(true), " байт<br>\n";
 
 ?>
