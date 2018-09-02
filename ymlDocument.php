@@ -89,7 +89,7 @@ class ymlDocument extends DomDocument
 			$dlv 	= $this->createElement( 'delivery-options');
 			$this->shop->appendChild($dlv);
 		}else{
-				$dlv 	= $dlvs[0];
+				$dlv 	= $dlvs->item(0);
 				$opts 	= $dlv->getElementsByTagName('option');
 				if($opts->length >= 5) $this->exc("максимум 5 опций доставки");
 		}

@@ -82,7 +82,7 @@ class ymlOffer extends DomElement
 			$dlv 	= new DomElement('delivery-options');
 			$this->appendChild($dlv);
 		}else{
-				$dlv 	= $dlvs[0];
+				$dlv 	= $dlvs->item(0);
 				$opts 	= $dlv->getElementsByTagName('option');
 				$this->check(	$opts->length >= 5	 	, "максимум 5 опций доставки"	);
 		}
