@@ -25,7 +25,7 @@ class ymlDocument extends DomDocument
 		$root->setAttribute('date', date('Y-m-d H:i'));
 		$root->appendChild($shop);
 		$this->appendChild($root);
-
+        // TODO: mb_strlen не включены по умолчанию, лучше чем-то заменить
 		if(mb_strlen($name,$this->encoding) >20 ) throw new RuntimeException("name='$name' длиннее 20 символов");
 
 		$this 	->add('name'	,$name)

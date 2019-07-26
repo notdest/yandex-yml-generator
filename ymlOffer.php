@@ -5,27 +5,39 @@ class ymlOffer extends DomElement
 	protected $enc  		;
 	protected $type  		;
 	protected $permitted 	;
-	protected $aliases 		= array('origin'=>'country_of_origin','warranty'=>'manufacturer_warranty',
-			'sale' =>'sales_notes','pic'=>'picture','isbn'=>'ISBN','pages'=>'page_extent','contents'=>'table_of_contents','performer' =>'performed_by',
-			'performance'=>'performance_type','length'=>'recording_length','stars' => 'hotel_stars','priceMin'=>'price_min','priceMax' =>'price_max','hallPart'=>'hall_part',
-			'premiere' => 'is_premiere', 'kids' => 'is_kids')	;
+	protected $aliases 		= [ 'origin'=>'country_of_origin','warranty'=>'manufacturer_warranty','sale' =>'sales_notes',
+                                'pic'=>'picture','isbn'=>'ISBN','pages'=>'page_extent','contents'=>'table_of_contents',
+                                'performer' =>'performed_by', 'performance'=>'performance_type','length'=>'recording_length',
+                                'stars' => 'hotel_stars','priceMin'=>'price_min','priceMax' =>'price_max',
+                                'hallPart'=>'hall_part', 'premiere' => 'is_premiere', 'kids' => 'is_kids'
+                              ]	;
 
 
 	public function __construct($type,$enc)
 	{
 		parent::__construct('offer');
 		$this->type = $type;
-		$p=array( 
-			'simple' 	=>	array('group_id','minq','stepq','model','age','vendor','vendorCode','manufacturer_warranty','downloadable','adult','rec'),
-			'arbitrary' =>	array('group_id','minq','stepq','age','vendorCode','manufacturer_warranty','adult','downloadable','typePrefix','rec'),
-			'book'		=>	array('age','manufacturer_warranty','downloadable','author','series','year','ISBN','volume','part','language','binding','page_extent','minq','stepq','adult','table_of_contents'),
-			'audiobook' =>	array('adult','manufacturer_warranty','minq','stepq','age','downloadable','author','series','year','delivery','ISBN','volume','part','language','table_of_contents','performed_by','performance_type','storage','format','recording_length'),
-			'artist' 	=>	array('minq','manufacturer_warranty','stepq','adult','age','year','media','artist','downloadable','starring','director','originalName','country'),
-			'tour' 		=>	array('minq','stepq','manufacturer_warranty','age','adult','country','worldRegion','region','dataTour','hotel_stars','room','meal','price_min','price_max','downloadable','options'),
-			'event' 	=>	array('manufacturer_warranty','minq','stepq','adult','age','hall','hall_part','downloadable','is_premiere','is_kids'),
-			'medicine'	=>  array('vendorCode','vendor'));
+		$p= [
+			'simple' 	=>	['group_id','minq','stepq','model','age','vendor','vendorCode','manufacturer_warranty',
+                             'downloadable','adult','rec'],
+			'arbitrary' =>	['group_id','minq','stepq','age','vendorCode','manufacturer_warranty','adult','downloadable',
+                             'typePrefix','rec'],
+			'book'		=>	['age','manufacturer_warranty','downloadable','author','series','year','ISBN','volume','part',
+                             'language','binding','page_extent','minq','stepq','adult','table_of_contents'],
+			'audiobook' =>	['adult','manufacturer_warranty','minq','stepq','age','downloadable','author','series','year',
+                             'delivery','ISBN','volume','part','language','table_of_contents','performed_by','performance_type',
+                             'storage','format','recording_length'],
+			'artist' 	=>	['minq','manufacturer_warranty','stepq','adult','age','year','media','artist','downloadable',
+                             'starring','director','originalName','country'],
+			'tour' 		=>	['minq','stepq','manufacturer_warranty','age','adult','country','worldRegion','region','dataTour',
+                             'hotel_stars','room','meal','price_min','price_max','downloadable','options'],
+			'event' 	=>	['manufacturer_warranty','minq','stepq','adult','age','hall','hall_part','downloadable',
+                             'is_premiere','is_kids'],
+			'medicine'	=>  ['vendorCode','vendor']
+        ];
 
-		$p_all =array('sales_notes','country_of_origin','barcode','cpa','param','pickup','delivery','store','picture','vat','expiry','weight','dimensions'); // методы для всех
+		$p_all = ['sales_notes','country_of_origin','barcode','cpa','param','pickup','delivery','store','picture','vat',
+                  'expiry','weight','dimensions']; // методы для всех
 
 		$this->permitted 	= array_merge( $p[$type],$p_all ) ;
 
@@ -128,14 +140,14 @@ class ymlOffer extends DomElement
 		$this->check(	!in_array( $method,$this->permitted )		 , "$method вызван при типе товара {$this->type}"	);
 
 		// значения, которые просто добавляем
-		if( in_array($method, array('model','series','author','vendorCode','vendor','expiry','rec',
+		if( in_array($method, ['model','series','author','vendorCode','vendor','expiry','rec',
 			'typePrefix','country_of_origin','ISBN','volume','part','language','binding','table_of_contents','performed_by',
 			'performance_type','storage','format','recording_length','artist','media','starring','director','originalName','country','worldRegion','region','dataTour'
-			,'hotel_stars','room','meal','price_min','price_max','options','hall','hall_part','is_premiere','is_kids','vat')) )
+			,'hotel_stars','room','meal','price_min','price_max','options','hall','hall_part','is_premiere','is_kids','vat']) )
 			return $this->add($method,$args[0]);
 
 		// флаги
-		if( in_array($method, array('downloadable','adult','store','pickup','delivery','manufacturer_warranty')) )
+		if( in_array($method, ['downloadable','adult','store','pickup','delivery','manufacturer_warranty']) )
 		{
 			if( !isset($args[0]) )	$args[0] = true;
 			return $this->add($method,($args[0]) ? 'true' :'false');
@@ -182,7 +194,7 @@ class ymlOffer extends DomElement
 		switch ($args[1]) 
 		{
 			case 'year':
-				$this->check(	!in_array($args[0],array(0,6,12,16,18)) , "age при age_unit=year должен быть 0, 6, 12, 16 или 18"	);
+				$this->check(	!in_array($args[0],[ 0,6,12,16,18 ] ) , "age при age_unit=year должен быть 0, 6, 12, 16 или 18"	);
 				break;
 
 			case 'month':
@@ -265,7 +277,7 @@ class ymlOffer extends DomElement
 	}
 
 	public function addStr( $name,$val,$limit )
-	{
+	{                               // TODO: mb_strlen не включены по умолчанию, лучше чем-то заменить
 		$this->check(	$limit && ( mb_strlen($val,$this->enc)>$limit) , 	"$name должен быть короче $limit символов");
 		return $this->add( $name,$val );
 	}
