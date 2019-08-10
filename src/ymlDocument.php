@@ -1,7 +1,9 @@
 <?php
 
+namespace notdest\yandexYmlGenerator;
 
-class ymlDocument extends DomDocument 
+
+class ymlDocument extends \DomDocument
 {
 
 	protected $currencies 					;
@@ -17,7 +19,7 @@ class ymlDocument extends DomDocument
 	{
 		parent::__construct('1.0',$enc);
 
-		$imp = new DOMImplementation;
+		$imp = new \DOMImplementation;
 
 		$root 			= $this->createElement('yml_catalog');									// делаем основные элементы
 		$shop 			= $this->createElement('shop');
@@ -26,7 +28,7 @@ class ymlDocument extends DomDocument
 		$root->appendChild($shop);
 		$this->appendChild($root);
         // TODO: mb_strlen не включены по умолчанию, лучше чем-то заменить
-		if(mb_strlen($name,$this->encoding) >20 ) throw new RuntimeException("name='$name' длиннее 20 символов");
+		if(mb_strlen($name,$this->encoding) >20 ) throw new \RuntimeException("name='$name' длиннее 20 символов");
 
 		$this 	->add('name'	,$name)
 				->add('company'	,$company)
@@ -280,7 +282,7 @@ class ymlDocument extends DomDocument
 		$this->offer 	->add('currencyId',$currency)
 						->add('categoryId',$category);
 
-		$pr 	= new DomElement('price',$price);
+		$pr 	= new \DomElement('price',$price);
 		$this->offer->appendChild($pr);
 		if( !is_null($from))		$pr->setAttribute('from',($from) ? 'true' :'false' );
 
@@ -291,7 +293,7 @@ class ymlDocument extends DomDocument
 
 	protected function exc($text)
 	{
-		throw new RuntimeException($text);
+		throw new \RuntimeException($text);
 	}
 
 

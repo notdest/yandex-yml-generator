@@ -4,8 +4,10 @@ $limit = 320000;     // вот столько надо для файла 500мб
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-include('../ymlOffer.php');
-include("../ymlDocument.php");
+include('../src/ymlOffer.php');
+include("../src/ymlDocument.php");
+
+use notdest\yandexYmlGenerator\ymlDocument ;
 
 $start  = time();
   

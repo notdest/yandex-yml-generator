@@ -1,8 +1,10 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-include('../ymlOffer.php');
-include("../ymlDocument.php");
+include('../src/ymlOffer.php');
+include("../src/ymlDocument.php");
+
+use notdest\yandexYmlGenerator\ymlDocument ;
 
 $fileName   = './artist.xml' ;
 

@@ -1,6 +1,9 @@
 <?php
 
-class ymlOffer extends DomElement
+namespace notdest\yandexYmlGenerator;
+
+
+class ymlOffer extends \DomElement
 {
 	protected $enc  		;
 	protected $type  		;
@@ -91,7 +94,7 @@ class ymlOffer extends DomElement
 		$dlvs 	= $this->getElementsByTagName('delivery-options');
 
 		if( !$dlvs->length ){
-			$dlv 	= new DomElement('delivery-options');
+			$dlv 	= new \DomElement('delivery-options');
 			$this->appendChild($dlv);
 		}else{
 				$dlv 	= $dlvs->item(0);
@@ -103,7 +106,7 @@ class ymlOffer extends DomElement
 		$this->check(	preg_match("/[^0-9\-]/",$days)	 , "days должно состоять из цифр и тирэ"	);
 		$this->check(	!is_int($before) || $before>24	 , "order-before должно быть целым и меньше 25");
 
-		$opt 	= new DomElement( 'option');
+		$opt 	= new \DomElement( 'option');
 		$dlv->appendChild($opt);
 
 		$opt->setAttribute('cost', $cost);
@@ -120,8 +123,8 @@ class ymlOffer extends DomElement
 		$this->check(	mb_strlen($txt,$this->enc)>3000	 , "description должен быть короче 3000 символов"	);
 
 		if( $tags ){
-			$cdata	= new DOMCdataSection($txt);
-			$desc 	= new DomElement( 'description');
+			$cdata	= new \DOMCdataSection($txt);
+			$desc 	= new \DomElement( 'description');
 			$this->appendChild($desc);
 			$desc->appendChild($cdata);
 			return $this;
@@ -187,7 +190,7 @@ class ymlOffer extends DomElement
 	{ 
 		$this->check(	!is_int($args[0]) , 	"age должен иметь тип int" );
 
-		$ageEl 	= new DomElement( 'age',$args[0] );
+		$ageEl 	= new \DomElement( 'age',$args[0] );
 		$this->appendChild($ageEl);
 		$ageEl->setAttribute('unit',$args[1] );
 
@@ -210,7 +213,7 @@ class ymlOffer extends DomElement
 
 	protected function _param($args)
 	{
-		$newEl 	= new DomElement('param',$args[1]);
+		$newEl 	= new \DomElement('param',$args[1]);
 		$this->appendChild($newEl);
 		$newEl->setAttribute('name', $args[0]);
 		if( isset($args[2]) ) 	$newEl->setAttribute('unit', $args[2]);
@@ -273,7 +276,7 @@ class ymlOffer extends DomElement
 
 	protected function check($expr , $msg)
 	{
-		if( $expr ) throw new RuntimeException($msg);
+		if( $expr ) throw new \RuntimeException($msg);
 	}
 
 	public function addStr( $name,$val,$limit )
@@ -284,7 +287,7 @@ class ymlOffer extends DomElement
 
 	public function add( $name,$val=false )
 	{
-		$newEl 	= ($val===false) ? new DomElement($name) : new DomElement($name,$val);
+		$newEl 	= ($val===false) ? new \DomElement($name) : new \DomElement($name,$val);
 		$this->appendChild($newEl);
 		return $this;
 	}

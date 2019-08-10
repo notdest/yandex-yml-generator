@@ -1,0 +1,27 @@
+{
+    "name": "notdest/yandex-yml-generator",
+    "description": "Simple Yandex Yml file generator.",
+    "type": "library",
+    "keywords": [
+        "Yandex",
+        "Yml"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksandr Solodov",
+            "email": "notdest@gmail.com",
+            "homepage": "https://github.com/notdest",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "notdest\\yandexYmlGenerator\\": "src"
+        }
+    }
+}
