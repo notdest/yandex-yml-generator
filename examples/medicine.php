@@ -62,7 +62,7 @@ $offer = $y->medicine( 'БАД Селен-актив n30 таблетки', 'id0
             ->url("http://magaz.ru/tovar.html")                 // !!!  условно обязательный. URL страницы товара
 
             ->oldprice(1500)                                    //      Старая цена для расчёта скидки
-            ->vat('VAT_10_110')                                 //      Ставка НДС для товара.
+            //->vat('VAT_10_110')                                 //      Ставка НДС для товара.
 
             ->pic('http://best.seller.ru/img/device12345.jpg')  // !!!  условно обязательные. Картинки
             ->pic('http://best.seller.ru/img/device124.jpg')
