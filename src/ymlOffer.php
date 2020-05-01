@@ -117,22 +117,24 @@ class ymlOffer extends \DomElement
 		return $this;
 	}
 
-
-	public function description($txt,$tags = false)
+    /**
+     * @param string $txt
+     * @param bool $tags
+     * @return self
+     */
+	public function description($txt, $tags = false)
 	{
 		$this->check(	mb_strlen($txt,$this->enc)>3000	 , "description должен быть короче 3000 символов"	);
-
-		if( $tags ){
-			$cdata	= new \DOMCdataSection($txt);
-			$desc 	= new \DomElement( 'description');
-			$this->appendChild($desc);
-			$desc->appendChild($cdata);
-			return $this;
-		}else{
-				return $this->add('description', $txt);
-		}
-
-		
+        $desc 	= new \DomElement( 'description');
+        if ($tags) {
+            $cdata	= new \DOMCdataSection($txt);
+            $this->appendChild($desc);
+            $desc->appendChild($cdata);
+        } else {
+            $desc->textContent = $txt;
+            $this->appendChild($desc);
+        }
+        return $this;
 	}
 
 
