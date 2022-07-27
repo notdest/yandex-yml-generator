@@ -272,7 +272,7 @@ class ymlDocument extends \DomDocument
 		if( (!is_int($category)) || ($category<1) || ($category>=pow(10,19)) )
 											$this->exc("categoryId - целое число, не более 18 знаков");
 
-		if( !is_int($price) || $price<0 ) 			$this->exc("price должно быть целым и положительным");
+		if( !is_numeric($price) || $price<0 ) 			$this->exc("price должно быть положительным числом");
 
 		if( !is_null($from)){
 			if( !is_bool($from) ) 					$this->exc('from должен быть boolean');
